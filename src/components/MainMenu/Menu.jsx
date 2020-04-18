@@ -8,13 +8,13 @@ const Menu = (props) => {
         <div className = {`${classes.menuBackground} ${classes.gameLoaded}`}>
             <div className = {classes.menuContainer}>
                 <NavLink activeClassName={classes.menuItem} to = {!props.link ? '/' : props.link}>
-                    <Button clickHandler = {() => alert('1')} text = "New Game" />
+                    <Button key={'1'} clickHandler = {() => alert('1')} text = "New Game" />
                 </NavLink >
                 <NavLink activeClassName={classes.menuItem} to = {!props.link ? '/' : props.link}>
-                    <Button clickHandler = {() => alert('1')} text = "My Character" />
+                    <Button key={'2'} clickHandler = {() => alert('1')} text = "My Character" />
                 </NavLink >
                 <NavLink activeClassName={classes.menuItem} to = {!props.link ? '/' : props.link}>
-                    <Button clickHandler = {() => alert('1')} text = "About developer" />
+                    <Button key={'3'} clickHandler = {() => alert('1')} text = "About developer" />
                 </NavLink >
             </div >
         </div >
