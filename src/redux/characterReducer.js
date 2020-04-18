@@ -1,10 +1,12 @@
+// Данные о персонаже
+// Опыт, уровень, характеристики
 
 let initialState = {};
 
-const characterReducer = (state=initialState, action) => {
+const characterReducer = (state = initialState, action) => {
     switch (action) {
         default:
-            return state
+            return state;
     }
 };
 

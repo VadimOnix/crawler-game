@@ -1,11 +1,12 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
+import MenuContainer from './components/MainMenu/MenuContainer';
 
 function App() {
     return (
         <BrowserRouter >
             <div className = "App">
-                initial state
+
             </div >
         </BrowserRouter >
     );
