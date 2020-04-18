@@ -1,0 +1,64 @@
+.mainButton
+  position: relative
+  overflow: hidden
+  text-align: center
+  display: block
+  width: 100%
+  padding-top: -2px
+  padding-bottom: 5px
+  min-width: 320px
+  transition: transform .2s ease
+
+
+  &:hover
+    transform: translateY(-5px)
+
+  p
+    font-family: Cyberfunk, sans-serif
+    color: white
+    text-align: center
+    font-size: 1.5rem
+    text-transform: uppercase
+    transition: 0.3s ease
+
+
+
+  svg
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 1
+
+    path
+      stroke-width: 3
+      stroke: #c8c7d7
+      fill: url(#gradient)
+      stroke-dasharray: 700
+      transition: transform 0.3s linear
+      stroke-linecap: round
+
+    &:hover path
+      transition: 0.2s ease
+      //stroke: #f6f543
+      stroke: #966ec3
+      animation: circler 3s reverse cubic-bezier(0.45, 0.09, 0.51, 0.95) 0s infinite
+      animation-fill-mode: forwards
+
+    &:hover + p
+      transition: .5s ease
+      //color: #f6f543
+      //text-shadow: #FFF 0 0 3px, #FFF 0 0 8px, #FFF 0 0 12px, #FF2D95 0 0 17px, #FF2D95 0 0 25px, #FF2D95 0 0 40px, #FF2D95 0 0 50px, #FF2D95 0 0 75px
+      text-shadow: -4px 3px 0px #bd56b2, 4px -2px 0px #649cf1;
+
+
+
+@keyframes circler
+  from
+    stroke-dasharray: 700
+    stroke-dashoffset: 0
+  to
+    stroke-dasharray: 700
+    stroke-dashoffset: 1400
+
+
+
