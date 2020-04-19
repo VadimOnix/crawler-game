@@ -4,17 +4,17 @@ import MenuContainer from './components/MainMenu/MenuContainer';
 import GameContainer from './components/Game/GameContainer';
 import PlayerInfoContainer from './components/PlayerInfo/PlayerInfoContainer';
 import { connect } from 'react-redux';
-import { setLoad } from './redux/commonAppReducer';
+import { switchPreloader } from './redux/commonAppReducer';
 import Preloader from './components/Preloader/Preloader';
 
 let mapStateToProps = (state) => {
     return {
-        isLoading: state.commonApp.isLoading
+        isLoading: state.commonApp.isLoading,
     };
 };
 
 let mapDispatchToProps = {
-    setLoad
+    setLoad: switchPreloader
 };
 
 class App extends React.Component {
@@ -37,7 +37,7 @@ class App extends React.Component {
             return (
                 <BrowserRouter >
                     <div className = "App">
-                        <Route path = "/" render = {() => <MenuContainer />} />
+                        <Route exact path = "/" render = {() => <MenuContainer />} />
                         <Route path = "/game" render = {() => <GameContainer />} />
                         <Route path = "/character" render = {() => <PlayerInfoContainer />} />
                     </div >

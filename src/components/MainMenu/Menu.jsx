@@ -4,18 +4,16 @@ import Button from './Button/Button';
 import { NavLink } from 'react-router-dom';
 
 const Menu = (props) => {
+    let optionsList = props.menuOptions.map((o,index) => (
+        <NavLink activeClassName = {classes.menuItem} to = {o.link}>
+            <Button key = {index} text = {o.label} />
+        </NavLink >
+    ));
+
     return (
         <div className = {`${classes.menuBackground} ${classes.gameLoaded}`}>
             <div className = {classes.menuContainer}>
-                <NavLink activeClassName={classes.menuItem} to = {!props.link ? '/' : props.link}>
-                    <Button key={'1'} clickHandler = {() => alert('1')} text = "New Game" />
-                </NavLink >
-                <NavLink activeClassName={classes.menuItem} to = {!props.link ? '/' : props.link}>
-                    <Button key={'2'} clickHandler = {() => alert('1')} text = "My Character" />
-                </NavLink >
-                <NavLink activeClassName={classes.menuItem} to = {!props.link ? '/' : props.link}>
-                    <Button key={'3'} clickHandler = {() => alert('1')} text = "About developer" />
-                </NavLink >
+                {optionsList}
             </div >
         </div >
     );

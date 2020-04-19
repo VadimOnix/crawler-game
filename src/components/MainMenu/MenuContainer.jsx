@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import Menu from './Menu';
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        menuOptions: state.commonApp.menuOptions
+    };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -12,7 +14,7 @@ function mapDispatchToProps(dispatch) {
 
 class MenuContainer extends Component {
     render() {
-        return <Menu />;
+        return <Menu menuOptions = {this.props.menuOptions}/>;
     }
 }
 

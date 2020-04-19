@@ -22,3 +22,11 @@ code {
     monospace;
 }
 
+a {
+  text-decoration: none !important;
+}
+
+.App {
+    background: url("./assets/img/MenuBackground.jpeg") no-repeat center;
+    background-size: cover;
+}

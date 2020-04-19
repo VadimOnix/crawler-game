@@ -4,7 +4,7 @@ import classes from './Button.module.sass'
 const Button = (props) => {
 
     let click = () => {
-      props.clickHandler()
+
     };
 
     return (
