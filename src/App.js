@@ -6,6 +6,7 @@ import PlayerInfoContainer from './components/PlayerInfo/PlayerInfoContainer';
 import { connect } from 'react-redux';
 import { switchPreloader } from './redux/commonAppReducer';
 import Preloader from './components/Preloader/Preloader';
+import DeveloperInfo from './components/DeveloperInfo/DeveloperInfo';
 
 let mapStateToProps = (state) => {
     return {
@@ -40,6 +41,7 @@ class App extends React.Component {
                         <Route exact path = "/" render = {() => <MenuContainer />} />
                         <Route path = "/game" render = {() => <GameContainer />} />
                         <Route path = "/character" render = {() => <PlayerInfoContainer />} />
+                        <Route path = "/about" render = {() => <DeveloperInfo />} />
                     </div >
                 </BrowserRouter >
             );

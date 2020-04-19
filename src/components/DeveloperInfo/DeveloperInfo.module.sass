@@ -1,0 +1,69 @@
+.background
+  height: 100vh
+  display: flex
+  justify-content: center
+  align-items: center
+
+.padder
+  padding: 0 20px;
+
+  @media screen and (max-width: 576px)
+    padding: 0
+
+.container
+  background: rgba(162,172,207, .25)
+  display: flex
+  border-right: 5px dashed #192561
+  border-left: 5px dashed #192561
+  border-radius: 0 40px 0 40px
+  transition: .3s ease
+  padding: 15px
+
+  @media screen and (max-width: 576px)
+    margin: 30px 0
+    padding: 15px 5px
+
+  &:hover
+    box-shadow: inset -8px -8px 11px -6px rgba(219, 116, 231, 0.65), inset 8px 8px 11px -6px rgba(219, 116, 231, 0.65), 0 4px 19px 7px rgba(219, 116, 231, 0.65)
+    border: 0 solid #8e3cc5
+    transform: scale(1.05)
+
+  @media screen and (max-width: 576px)
+    flex-direction: column
+    align-items: center
+
+.avatar
+  flex-basis: 35%
+
+  @media screen and (max-width: 576px)
+    flex-basis: 100%
+
+  img
+    border-radius: 0 25px 0 25px
+    width: 300px
+    margin: 15px
+
+    @media screen and (max-width: 576px)
+      margin: 15px 5px
+
+    @media screen and (min-width: 360px)
+      margin: 0px 5px
+
+.info
+  flex-basis: 65%
+  @media screen and (max-width: 576px)
+    display: flex
+    flex-direction: column
+    align-items: center
+    max-width: 320px
+
+  h1
+    font-family: Consolas, monospace
+    font-size: 2.5rem
+    color: white
+    text-shadow: 0 0 5px #FFF, 0 0 10px #FFF, 0 0 15px #FFF, 0 0 20px #f8f363, 0 0 30px #f8f363, 0 0 40px #49FF18, 0 0 55px #f8f363, 0 0 75px #f8f363;
+
+  p
+    font-family: Consolas, monospace
+    color: black
+    font-size: 1.6rem
