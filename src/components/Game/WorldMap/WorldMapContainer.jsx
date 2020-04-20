@@ -13,7 +13,6 @@ function mapDispatchToProps(dispatch) {
 class WorldMapContainer extends Component {
     render() {
         return <WorldMap />;
-
     }
 }
 
