@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Character from './Character';
-import { moveTo } from '../../../redux/characterReducer';
 
 
 let mapStateToProps = (state) => {

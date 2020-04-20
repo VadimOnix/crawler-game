@@ -18,6 +18,7 @@ class GameContainer extends Component {
     constructor(props) {
         super(props);
         this.handleKeydown = this.handleKeydown.bind(this);
+        this.reservedKeys = [37, 38, 39, 40];
     }
 
     componentDidMount() {
@@ -80,13 +81,16 @@ class GameContainer extends Component {
     move(direction) {
         let result = true;
         let newPosition = this.calculateNewPosition(this.props.position, direction);
-        this.props.moveTo(newPosition);
-        console.log(direction);
+        if (newPosition.toString() !== this.props.position.toString()){
+            this.props.moveTo(newPosition);
+        } else {
+            result = false;
+        }
         return result;
     }
 
     handleKeydown(e) {
-        if ([37, 38, 39, 40].includes(e.keyCode)) {
+        if (this.reservedKeys.includes(e.keyCode)) {
             e.preventDefault();
             switch (e.keyCode) {
                 case 37:
@@ -101,10 +105,7 @@ class GameContainer extends Component {
                     return console.log(e.keyCode);
             }
         }
-
     }
-
-
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameContainer);
