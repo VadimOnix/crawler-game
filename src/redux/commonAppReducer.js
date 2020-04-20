@@ -1,10 +1,12 @@
-// отображать текущую карту
+// Общие настройки приложения
 const SET_LOAD = 'SET-LOAD';
 const ADD_MENU_OPTION = 'ADD-MENU-OPTION';
 const DELETE_MENU_OPTION = 'DELETE-MENU-OPTION';
+const CHANGE_BACKGROUND = 'CHANGE-BACKGROUND';
 
 let initialState = {
     isLoading: true,
+    backgroundImageUrl: '',
     menuOptions: [
         {
             label: 'New game',
@@ -23,6 +25,11 @@ const commonAppReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: action.status,
+            };
+        case CHANGE_BACKGROUND:
+            return {
+                ...state,
+                backgroundImageUrl: action.url,
             };
         case ADD_MENU_OPTION:
             return {
@@ -43,6 +50,12 @@ const commonAppReducer = (state = initialState, action) => {
             };
         default:
             return state;
+    }
+};
+export const changeBackgroundImage = (url) => {
+    return {
+        type: CHANGE_BACKGROUND,
+        url
     }
 };
 

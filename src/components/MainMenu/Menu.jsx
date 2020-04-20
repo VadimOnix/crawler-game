@@ -11,7 +11,7 @@ const Menu = (props) => {
     ));
 
     return (
-        <div className = {`${classes.menuBackground} ${classes.gameLoaded}`}>
+        <div className = {classes.menuBackground}>
             <div className = {classes.menuContainer}>
                 {optionsList}
             </div >
