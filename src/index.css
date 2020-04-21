@@ -39,3 +39,7 @@ a {
     justify-content: center;
     align-items: center;
 }
+
+.GameSprite {
+    position: absolute;
+}

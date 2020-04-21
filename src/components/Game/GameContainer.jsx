@@ -3,15 +3,16 @@ import { connect } from 'react-redux';
 import Game from './Game';
 import { moveTo } from '../../redux/characterReducer';
 import CONSTANTS from '../../data/constants';
+import { loadLevel } from '../../redux/gameReducer';
 
 function mapStateToProps(state) {
     return {
-        position: state.character.position
+        position: state.character.position,
     };
 }
 
 let mapDispatchToProps = {
-    moveTo
+    moveTo, loadLevel
 };
 
 class GameContainer extends Component {
@@ -22,9 +23,10 @@ class GameContainer extends Component {
     }
 
     componentDidMount() {
+        // load firs level
+        this.props.loadLevel(1);
         // bad solution for architecture
         window.addEventListener('keydown', this.handleKeydown);
-
     }
 
     componentWillUnmount() {
@@ -74,6 +76,9 @@ class GameContainer extends Component {
         return newPosition;
     }
 
+    validatePosition(position, ) {
+
+    }
     /**
      * @param {string} direction (W,N,E,S)
      * @return {boolean} true if move was successful, false if not

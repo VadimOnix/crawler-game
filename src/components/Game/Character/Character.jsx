@@ -7,12 +7,12 @@ const Character = (props) => {
         left: props.position[0],
         backgroundImage: `url('${props.sprite}')`,
         backgroundPosition: '0 0',
-        width: '100px',
-        height: '100px',
+        width: `${props.constants.SPRITE_SIZE}px`,
+        height: `${props.constants.SPRITE_SIZE}px`,
     };
 
     return (
-        <div style={spriteControl}>
+        <div className="GameSprite" style = {spriteControl}>
 
         </div >
     );

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Character from './Character';
+import CONSTANTS from '../../../data/constants'
 
 
 let mapStateToProps = (state) => {
@@ -17,7 +18,7 @@ class CharacterContainer extends Component {
 
     render() {
         return (
-            <Character {...this.props}/>
+            <Character position = {this.props.position} sprite = {this.props.sprite} constants = {CONSTANTS} />
         );
     }
 }

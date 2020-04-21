@@ -4,9 +4,12 @@ import WorldMapContainer from './WorldMap/WorldMapContainer';
 import classes from './Game.module.sass'
 const Game = (props) => {
     return (
-        <div className={classes.gameContainer}>
-            <WorldMapContainer/>
-            <CharacterContainer/>
+        <div>
+            <div className={classes.gameContainer}>
+                <WorldMapContainer/>
+                <CharacterContainer/>
+            </div>
+        {/* TODO: меню и инвентарь */}
         </div >
     );
 };
