@@ -1,7 +1,5 @@
 // карта, если эксплоринг
 // битва, если битва
-import ground_sheet from '../assets/img/map/colony-grounds-ready.png';
-import CONSTANTS from '../data/constants';
 
 const LOAD_LEVEL = 'LOAD-LEVEL';
 const SET_MAP_LEVEL = 'SET-MAP-LEVEL';

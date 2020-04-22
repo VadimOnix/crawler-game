@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Character from './Character';
-import CONSTANTS from '../../../data/constants'
+import CONSTANTS from '../../../gameCore/constants'
 
 
 let mapStateToProps = (state) => {

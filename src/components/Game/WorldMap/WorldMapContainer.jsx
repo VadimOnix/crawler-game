@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import WorldMap from './WorldMap';
 import { setMapAssets, setMapLevel } from '../../../redux/gameReducer';
-import { levelAssets, LEVELS } from '../../../data/levels/LEVELS';
-import CONSTANTS from '../../../data/constants';
+import { levelAssets, LEVELS } from '../../../gameCore/levels/LEVELS';
+import CONSTANTS from '../../../gameCore/constants';
 
 function mapStateToProps(state) {
     return {

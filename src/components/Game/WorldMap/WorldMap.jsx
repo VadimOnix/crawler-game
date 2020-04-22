@@ -4,8 +4,8 @@ import classes from './WorldMap.module.sass';
 const Tile = (props) => {
 
     const styles = props.asset !== undefined ? {
-            left: Math.round(props.Xid * props.asset.sizeX) + props.fixLeft,
-            top: Math.round(props.Yid * props.asset.sizeY) + props.fixTop,
+            transform: `translate(${Math.round(props.Xid * props.asset.sizeX) + props.fixLeft}px, 
+                                  ${Math.round(props.Yid * props.asset.sizeY) + props.fixTop}px)`,
             backgroundColor: '#21214a',
             backgroundImage: `url('${props.asset.bgUrl}')`,
             backgroundPosition: `left -${props.asset.left}px top -${props.asset.top}px`,
