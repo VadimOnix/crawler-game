@@ -39,10 +39,10 @@ export const calculateNewPosition = (prevPosition, direction) => {
     return newPosition;
 };
 
-export const waitGameAnimate = () => {
+export const waitGameAnimate = (ms) => {
     return new Promise((resolve => {
         setTimeout(() => {
             resolve();
-        }, CONSTANTS.GAME_ANIMATE_SPEED);
+        }, ms);
     }));
 };
