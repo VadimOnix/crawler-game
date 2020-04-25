@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import WorldMap from './WorldMap';
-import { setMapAssets, setMapLevel } from '../../../redux/gameReducer';
+import { setMapAssets, setMapLevel } from '../../../redux/worldMapReducer';
 import { levelAssets, LEVELS } from '../../../gameCore/levels/LEVELS';
 import CONSTANTS from '../../../gameCore/constants';
 
 function mapStateToProps(state) {
     return {
         level: state.game.level,
-        mapLevel: state.game.mapLevel,
-        mapAssets: state.game.mapAssets,
+        mapLevel: state.worldMap.mapLevel,
+        mapAssets: state.worldMap.mapAssets,
     };
 }
 

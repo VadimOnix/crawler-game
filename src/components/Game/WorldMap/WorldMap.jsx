@@ -46,6 +46,7 @@ const RowMap = (props) => {
 };
 
 const WorldMap = (props) => {
+
     let rows = props.mapLevel.map((row, index) => (
         <RowMap key = {`row-${index}`}
                 id = {index}

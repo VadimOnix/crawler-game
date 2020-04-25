@@ -1,5 +1,5 @@
 import React from 'react';
-import CharacterContainer from './Character/CharacterContainer';
+import GameObjectsContainer from './GameObjects/GameObjectsContainer';
 import WorldMapContainer from './WorldMap/WorldMapContainer';
 import classes from './Game.module.sass'
 const Game = (props) => {
@@ -7,7 +7,7 @@ const Game = (props) => {
         <div>
             <div className={classes.gameContainer}>
                 <WorldMapContainer/>
-                <CharacterContainer/>
+                <GameObjectsContainer/>
             </div>
         {/* TODO: меню и инвентарь */}
         </div >

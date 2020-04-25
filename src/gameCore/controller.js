@@ -1,48 +1,100 @@
 import CONSTANTS from './constants';
+import { cloneDeep } from 'lodash';
+import LEVELS, { levelAssets } from './levels/LEVELS';
 
 /**
  * @function calculatePosition
- * @param {Array} prevPosition [x,y]
+ * @param {Object} prevCoords {x,y}
  * @param {string} direction  (W,N,E,S)
  * @retruns {Array} newPosition [x,y]
  * */
-export const calculateNewPosition = (prevPosition, direction) => {
-    let newPosition = [...prevPosition];
+export const calculateNewCoords = (prevCoords, direction) => {
+    let newCoords = {...prevCoords};
     switch (direction) {
         case 'W':
-            if (prevPosition[0] > 0) {
-                newPosition[0] = prevPosition[0] - CONSTANTS.SPRITE_SIZE;
-                newPosition[1] = prevPosition[1];
+            if (prevCoords.x > 0) {
+                newCoords.x = prevCoords.x - 1;
             }
-            return newPosition;
+            return newCoords;
         case 'N':
-            if (prevPosition[1] > 0) {
-                newPosition[0] = prevPosition[0];
-                newPosition[1] = prevPosition[1] - CONSTANTS.SPRITE_SIZE;
-
+            if (prevCoords.y > 0) {
+                newCoords.y = prevCoords.y - 1;
             }
-            return newPosition;
+            return newCoords;
         case 'E':
-            if (prevPosition[0] < CONSTANTS.MAP_WIDTH - CONSTANTS.SPRITE_SIZE) {
-                newPosition[0] = prevPosition[0] + CONSTANTS.SPRITE_SIZE;
-                newPosition[1] = prevPosition[1];
+            if (prevCoords.x < CONSTANTS.MAP_COLUMNS - 1) {
+                newCoords.x = prevCoords.x + 1;
             }
-            return newPosition;
+            return newCoords;
         case 'S': {
-            if (prevPosition[1] < CONSTANTS.MAP_HEIGHT - CONSTANTS.SPRITE_SIZE) {
-                newPosition[0] = prevPosition[0];
-                newPosition[1] = prevPosition[1] + CONSTANTS.SPRITE_SIZE;
+            if (prevCoords.y < CONSTANTS.MAP_ROWS - 1) {
+                newCoords.y = prevCoords.y + 1;
             }
-            return newPosition;
+            return newCoords;
         }
     }
-    return newPosition;
+    return newCoords;
 };
 
-export const waitGameAnimate = (ms) => {
-    return new Promise((resolve => {
-        setTimeout(() => {
-            resolve();
-        }, ms);
-    }));
+export const getUpdatedGameObjects = (gameObjects, action, currentLevel) => {
+    let newGameObjects = cloneDeep(gameObjects);
+    let heroChangedPosition = true;
+    switch (action.type) {
+        case 'move': {
+            newGameObjects.forEach(obj => {
+                switch (obj.type) {
+                    case 'hero': {
+                        // calculate new walkIndex
+                        let newWalkIndex = obj.walkIndex;
+                        obj.currentDirection = action.direction;
+
+                        if (action.direction === obj.prevDirection) {
+                            if (newWalkIndex < CONSTANTS.PHASE_COUNT_ANIMATION) {
+                                newWalkIndex += 1;
+                            } else {
+                                newWalkIndex = 0;
+                            }
+                        } else {
+                            obj.prevDirection = action.direction;
+                            newWalkIndex = 1;
+                        }
+
+                        obj.walkIndex = newWalkIndex;
+
+
+                        // calculate new move coordinates
+                        let newCoords = calculateNewCoords(obj.coords, action.direction);
+                        let validated = validateNextCoordinateForMove(newCoords, LEVELS[currentLevel], levelAssets);
+
+                        if (
+                            ((newCoords.x !== obj.coords.x) || (newCoords.y !== obj.coords.y)) && validated
+                        ) {
+                            obj.coords = {x: newCoords.x, y: newCoords.y};
+                        } else {
+                            heroChangedPosition = false;
+                        }
+                    }
+                    // TODO: add another types
+                }
+            });
+
+        }
+    }
+    return {
+        newGameObjects,
+        info: {
+            heroChangedPosition
+        }
+    };
 };
+
+
+export const validateNextCoordinateForMove = (newCoords, levelMap, levelAssets) => {
+    let x = newCoords.x;
+    let y = newCoords.y;
+    return levelAssets[levelMap[y][x]].walkable;
+};
+
+
+
+

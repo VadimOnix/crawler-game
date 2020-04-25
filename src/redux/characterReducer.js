@@ -1,15 +1,17 @@
-import playerSprite from '../assets/img/character/Female_Character.png';
+// ИСПОЛЬЗОВАТЬ ДЛЯ КОНТРОЛЯ ХАРАКТЕРИСТИК, ОТОБРАЖЕНИЯ В МЕНЮ И Т,Д,
 
 const MOVE_TO = 'MOVE-TO';
 const WALK_INDEX_UPDATE = 'WALK-INDEX-UPDATE';
 const PREV_DIRECTION_UPDATE = 'PREV-DIRECTION-UPDATE';
+const SET_PLAYER_SPRITE = 'SET-PLAYER-SPRITE';
 
 let initialState = {
     position: [0, 0],
-    sprite: playerSprite,
+    sprite: '',
     spritePosition: [0, 0],
     walkIndex: 0,
-    prevDirection: 'S'
+    prevDirection: 'S',
+
 };
 
 const characterReducer = (state = initialState, action) => {
@@ -24,6 +26,11 @@ const characterReducer = (state = initialState, action) => {
                 ...state,
                 position: action.position,
                 spritePosition: action.spritePosition,
+            };
+        case SET_PLAYER_SPRITE:
+            return {
+                ...state,
+                sprite: action.src
             };
         case WALK_INDEX_UPDATE:
             return {
@@ -46,6 +53,13 @@ export const walkIndexUpdate = (index) => {
     return {
         type: WALK_INDEX_UPDATE,
         index
+    }
+};
+
+export const setPlayerSprite = (src) => {
+    return {
+        type: SET_PLAYER_SPRITE,
+        src
     }
 };
 
