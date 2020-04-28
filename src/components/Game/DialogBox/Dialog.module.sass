@@ -1,0 +1,45 @@
+.dialogBoxWrapper
+  position: absolute
+  z-index: 999
+  width: 500px
+  height: 180px
+  transform: translate(150px, 400px)
+
+
+.dialogBox
+  display: grid
+  grid-gap: 20px
+  grid-template-rows: 1fr
+
+  background: linear-gradient(18deg, rgba(54, 62, 99, 1) 0%, rgba(15, 30, 73, 1) 100%)
+  border: 3px solid white
+  border-radius: 5px
+
+.hero
+  grid-template-areas: 'a t t'
+
+  .avatar
+    margin-left: 20px
+
+  .text
+    padding-right: 20px
+
+.enemy
+  grid-template-areas: 't t a'
+
+  .avatar
+    margin-right: 20px
+
+  .text
+    padding-left: 20px
+
+.avatar
+  grid-area: a
+
+.text
+  grid-area: t
+  color: white
+  font-family: Consolas, monospace
+  text-indent: 1.5em
+  text-align: justify
+

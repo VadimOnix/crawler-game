@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { changeBackgroundImage, switchPreloader } from './redux/commonAppReducer';
 import App from './App';
 
-import bgImage from './assets/img/MenuBackground.jpeg';
 import bgImageBlured from './assets/img/MenuBackground_blured.jpeg';
 
 let mapStateToProps = (state) => {

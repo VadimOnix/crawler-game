@@ -1,6 +1,6 @@
 import CONSTANTS from './constants';
 import { cloneDeep } from 'lodash';
-import LEVELS, { levelAssets } from './levels/LEVELS';
+import LEVELS from './levels/LEVELS';
 
 /**
  * @function calculatePosition
@@ -64,7 +64,7 @@ export const getUpdatedGameObjects = (gameObjects, action, currentLevel) => {
 
                         // calculate new move coordinates
                         let newCoords = calculateNewCoords(obj.coords, action.direction);
-                        let validated = validateNextCoordinateForMove(newCoords, LEVELS[currentLevel], levelAssets);
+                        let validated = validateNextCoordinateForMove(newCoords, LEVELS[currentLevel].levelMap, LEVELS[currentLevel].levelAssets);
 
                         if (
                             ((newCoords.x !== obj.coords.x) || (newCoords.y !== obj.coords.y)) && validated
@@ -88,13 +88,22 @@ export const getUpdatedGameObjects = (gameObjects, action, currentLevel) => {
     };
 };
 
+export const checkOnGameEvent = (gameObjects) => {
+    let result = {isGameEvent: false, eventObject: null};
+    let heroPos = gameObjects.find(obj => obj.type === 'hero').coords;
+    gameObjects.forEach(obj => {
+        if (obj.type === 'dialog' || obj.type === 'battle') {
+            if (obj.coords.x === heroPos.x && obj.coords.y === heroPos.y) {
+                result = {isGameEvent: true, eventObject: obj};
+                return result;
+            }
+        }
+    });
+    return result;
+};
 
 export const validateNextCoordinateForMove = (newCoords, levelMap, levelAssets) => {
     let x = newCoords.x;
     let y = newCoords.y;
     return levelAssets[levelMap[y][x]].walkable;
 };
-
-
-
-

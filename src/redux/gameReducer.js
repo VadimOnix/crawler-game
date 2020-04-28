@@ -6,6 +6,7 @@ const SET_GAME_OBJECTS = 'SET-GAME-OBJECTS';
 const SET_GAME_OBJECT_PARAMETER = 'SET-GAME-OBJECT-PARAMETER';
 const SET_GAME_MODE = 'SET-GAME-MODE';
 
+
 let initialState = {
     level: 1,
     gameMode: 'exploring',
@@ -48,18 +49,31 @@ let initialState = {
             walkIndex: 0,
             prevDirection: 'S',
             currentDirection: 'S'
+        },
+        {
+            id: 4,
+            type: 'dialog',
+            dialogId: 1,
+            coords: {
+                x: 2,
+                y: 1
+            },
+            sprite: '',
+            spritePosition: [0, 0],
+            walkIndex: 0,
+            prevDirection: 'S',
+            currentDirection: 'S'
         }
     ],
-
-
 };
 
-const gamerReducer = (state = initialState, action) => {
+const gameReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_LEVEL:
             return {
                 ...state,
-                level: action.level,
+                level: action.level.level,
+                dialogs: action.dialogs
             };
         case SET_GAME_OBJECTS:
             return {
@@ -85,14 +99,16 @@ const gamerReducer = (state = initialState, action) => {
             };
         default:
             return state;
+
+
     }
 };
 
 
-export const loadLevel = (level, gameObjects = undefined) => {
+export const loadLevel = (level) => {
     return {
         type: LOAD_LEVEL,
-        level, gameObjects
+        level
     };
 };
 
@@ -118,4 +134,4 @@ export const setGameObjectParameter = (objectId, parameter, value) => {
 };
 
 
-export default gamerReducer;
+export default gameReducer;

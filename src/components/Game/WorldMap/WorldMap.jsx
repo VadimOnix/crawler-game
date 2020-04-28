@@ -19,7 +19,6 @@ const Tile = (props) => {
         <div className = "GameSprite"
              style = {styles}
         >
-            {props.value}
         </div >
     );
 };
@@ -34,7 +33,6 @@ const RowMap = (props) => {
             Yid = {props.id}
             fixTop = {props.constants.FIX_TOP}
             fixLeft = {props.constants.FIX_LEFT}
-            value = {value}
         />)
     );
 

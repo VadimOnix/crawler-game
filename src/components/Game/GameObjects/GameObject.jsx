@@ -13,7 +13,7 @@ const GameObject = (props) => {
 
     return (
         <div className="GameSprite" style = {spriteControl}>
-            
+
         </div >
     );
 };

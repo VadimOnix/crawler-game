@@ -1,27 +1,22 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { batch, connect } from 'react-redux';
 import Game from './Game';
-import { moveTo, prevDirectionUpdate, walkIndexUpdate } from '../../redux/characterReducer';
-import { loadLevel, setGameObjectParameter, setGameObjects } from '../../redux/gameReducer';
-import { getUpdatedGameObjects} from '../../gameCore/controller';
+import { loadLevel, setGameObjects } from '../../redux/gameReducer';
+import { checkOnGameEvent, getUpdatedGameObjects } from '../../gameCore/controller';
 import CONSTANTS from '../../gameCore/constants';
+import LEVELS from '../../gameCore/levels/LEVELS';
+import { setCurrentDialog } from '../../redux/dialogsReducer';
 
 function mapStateToProps(state) {
     return {
-        position: state.character.position,
-        spritePosition: state.character.spritePosition,
-        walkIndex: state.character.walkIndex,
-        prevDirection: state.character.prevDirection,
-        mapLevel: state.game.mapLevel,
-        mapAssets: state.game.mapAssets,
         gameObjects: state.game.gameObjects,
-        level: state.game.level
+        level: state.game.level,
+        alreadyReadIndexes: state.dialogs.alreadyReadIndexes
     };
 }
 
 let mapDispatchToProps = {
-    moveTo, loadLevel, walkIndexUpdate, prevDirectionUpdate, setGameObjectParameter, setGameObjects
-
+    loadLevel, setGameObjects, setCurrentDialog,
 };
 
 class GameContainer extends Component {
@@ -35,7 +30,7 @@ class GameContainer extends Component {
     componentDidMount() {
 
         // load firs level
-        this.props.loadLevel(1);
+        this.props.loadLevel(LEVELS[1]);
         // bad solution for architecture
         window.addEventListener('keydown', this.handleKeydown);
     }
@@ -67,9 +62,19 @@ class GameContainer extends Component {
             this.props.level
         );
 
-        this.props.setGameObjects(updatedGameObjects.newGameObjects)
-    }
+        let event = checkOnGameEvent(updatedGameObjects.newGameObjects);
+        batch(() => {
+            if (event.isGameEvent) {
+                if (event.eventObject.type === 'dialog' &&
+                    !this.props.alreadyReadIndexes.includes(event.eventObject.dialogId))
+                {
+                    this.props.setCurrentDialog(event.eventObject.dialogId);
+                }
+            }
+            this.props.setGameObjects(updatedGameObjects.newGameObjects);
+        });
 
+    }
 
 
     handleKeydown(e) {

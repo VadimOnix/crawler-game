@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import WorldMap from './WorldMap';
-import { setMapAssets, setMapLevel } from '../../../redux/worldMapReducer';
-import { levelAssets, LEVELS } from '../../../gameCore/levels/LEVELS';
+import { setMapAssets, setLevelMap } from '../../../redux/worldMapReducer';
+import LEVELS from '../../../gameCore/levels/LEVELS';
 import CONSTANTS from '../../../gameCore/constants';
 
 function mapStateToProps(state) {
@@ -14,14 +14,14 @@ function mapStateToProps(state) {
 }
 
 let mapDispatchToProps = {
-    setMapLevel, setMapAssets
+    setLevelMap, setMapAssets
 };
 
 
 class WorldMapContainer extends Component {
     componentDidMount() {
-        this.props.setMapLevel(LEVELS[`${this.props.level}`]);
-        this.props.setMapAssets(levelAssets);
+        this.props.setLevelMap(LEVELS[this.props.level].levelMap);
+        this.props.setMapAssets(LEVELS[this.props.level].levelAssets);
     }
 
     render() {

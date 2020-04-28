@@ -1,15 +1,16 @@
 import React from 'react';
 import GameObjectsContainer from './GameObjects/GameObjectsContainer';
 import WorldMapContainer from './WorldMap/WorldMapContainer';
-import classes from './Game.module.sass'
+import classes from './Game.module.sass';
+import DialogContainer from './DialogBox/DialogContainer';
+
 const Game = (props) => {
     return (
-        <div>
-            <div className={classes.gameContainer}>
-                <WorldMapContainer/>
-                <GameObjectsContainer/>
-            </div>
-        {/* TODO: меню и инвентарь */}
+        <div className = {classes.gameContainer}>
+            <WorldMapContainer />
+            <GameObjectsContainer />
+
+            <DialogContainer />
         </div >
     );
 };

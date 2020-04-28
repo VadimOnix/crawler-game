@@ -1,6 +1,6 @@
 // отображать текущую карту
-const SET_MAP_LEVEL = 'SET-MAP-LEVEL';
-const SET_MAP_ASSETS = 'SET-MAP-ASSETS';
+const SET_LEVEL_MAP = 'SET-LEVEL-MAP';
+const SET_ASSETS_MAP = 'SET-MAP-ASSETS';
 
 let initialState = {
     mapLevel: [],
@@ -19,12 +19,12 @@ let initialState = {
 
 const worldMapReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SET_MAP_ASSETS:
+        case SET_ASSETS_MAP:
             return {
                 ...state,
                 mapAssets: action.assetsObject,
             };
-        case SET_MAP_LEVEL:
+        case SET_LEVEL_MAP:
             return {
                 ...state,
                 mapLevel: action.map,
@@ -36,14 +36,14 @@ const worldMapReducer = (state = initialState, action) => {
 
 export const setMapAssets = (assetsObject) => {
     return {
-        type: SET_MAP_ASSETS,
+        type: SET_ASSETS_MAP,
         assetsObject
     };
 };
 
-export const setMapLevel = (map) => {
+export const setLevelMap = (map) => {
     return {
-        type: SET_MAP_LEVEL,
+        type: SET_LEVEL_MAP,
         map
     };
 };
