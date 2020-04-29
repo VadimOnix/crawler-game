@@ -50,7 +50,7 @@ export const LEVELS = {
                 type: 'ground',
                 walkable: true,
                 bgUrl: ground_sheet,
-                top: 656,
+                top: 654,
                 left: 80,
                 sizeX: CONSTANTS.SPRITE_SIZE,
                 sizeY: CONSTANTS.SPRITE_SIZE,

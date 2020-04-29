@@ -4,18 +4,19 @@ import classes from './Dialog.module.sass';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { animated, useTransition } from 'react-spring';
-import { addReadDialog } from '../../../redux/dialogsReducer';
+import { addReadDialog, setTyping } from '../../../redux/dialogsReducer';
 import { setGameMode } from '../../../redux/gameReducer';
 import DialogBox from './DialogBox';
 
 
-const DialogOnHook = () => {
+const Dialog = () => {
     // REDUX CONNECT
     const dialogs = useSelector(state => state.dialogs);
     const dispatch = useDispatch();
 
     const currDialogData = dialogs.dialogList[dialogs.currentDialogId];
     const phrasesCount = currDialogData.phrases.length;
+    const typing = dialogs.typing;
 
     const boxes = currDialogData.phrases.map((p) => {
         let boxRole = p.speaker === 'hero' ? classes.hero : classes.enemy;
@@ -27,6 +28,7 @@ const DialogOnHook = () => {
                         boxRole = {boxRole}
                         spriteSrc = {spriteSrc}
                         text = {p.text}
+                        speaker = {p.speaker}
                     />
                 </animated.div >
             )
@@ -37,8 +39,9 @@ const DialogOnHook = () => {
     let [index, setIndex] = useState(0);
 
     const handleEnterKeydown = useCallback((e) => {
-        if (e.keyCode === 13) {
+        if (e.keyCode === 13 && !typing) {
             if (index < phrasesCount - 1) {
+                dispatch(setTyping(true));
                 setIndex(index + 1);
             } else {
                 batch(() => {
@@ -48,22 +51,21 @@ const DialogOnHook = () => {
                 );
             }
         }
-    }, [dialogs.currentDialogId, dialogs.currentPhrase, dispatch, index, phrasesCount]);
+    }, [dialogs.currentDialogId, dispatch, typing, index, phrasesCount]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleEnterKeydown);
 
         return () => {
-
             window.removeEventListener('keydown', handleEnterKeydown);
         };
     });
 
 
     const transitions = useTransition(index, p => p, {
-        from: {opacity: 0, transform: 'translate3d(100%,0,0)'},
-        enter: {opacity: 1, transform: 'translate3d(0%,0,0)'},
-        leave: {opacity: 0, transform: 'translate3d(-50%,0,0)'},
+        from: {opacity: 0, transform: 'translateY(100%)'},
+        enter: {opacity: 1, transform: 'translateY(0)'},
+        leave: {opacity: 0, transform: 'translateY(-50%)'},
     });
 
 
@@ -74,11 +76,10 @@ const DialogOnHook = () => {
                     return <D key = {key} style = {props} />;
                 }
             )}
-
         </div >
     );
 
 
 };
 
-export default DialogOnHook;
+export default Dialog;

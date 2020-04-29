@@ -1,34 +1,40 @@
 .dialogBoxWrapper
   position: absolute
   z-index: 999
-  width: 500px
-  height: 180px
+
   transform: translate(150px, 400px)
 
 
 .dialogBox
+  position: relative
+  width: 500px
+  height: 150px
   display: grid
-  grid-gap: 20px
-  grid-template-rows: 1fr
+  grid-column-gap: 20px
+  grid-template-rows: 1fr 3fr
+  grid-template-columns: 1fr 3fr
 
   background: linear-gradient(18deg, rgba(54, 62, 99, 1) 0%, rgba(15, 30, 73, 1) 100%)
   border: 3px solid white
   border-radius: 5px
 
 .hero
-  grid-template-areas: 'a t t'
+  grid-template-areas: 'a h h' 'a t t'
 
   .avatar
     margin-left: 20px
+    justify-self: start
 
   .text
     padding-right: 20px
 
+
 .enemy
-  grid-template-areas: 't t a'
+  grid-template-areas: 'h h a' 't t a'
 
   .avatar
     margin-right: 20px
+    justify-self: end
 
   .text
     padding-left: 20px
@@ -39,7 +45,30 @@
 .text
   grid-area: t
   color: white
+  width: 100%
   font-family: Consolas, monospace
   text-indent: 1.5em
-  text-align: justify
+  word-wrap: break-word
+  justify-self: start
 
+  p
+    margin-block-start: 0
+
+.title
+  grid-area: h
+  color: white
+  width: 100%
+  font-family: Consolas, monospace
+  text-indent: 1.5em
+
+.cursor
+  color: white
+  background-color: white
+
+.nextPopup
+  right: 10px
+  bottom: 5px
+  font-size: 0.8rem
+
+  span
+    color: white

@@ -2,11 +2,12 @@ const ADD_READ_DIALOG = 'ADD-READ-DIALOG';
 const DELETE_DIALOG = 'DELETE-DIALOG';
 const LOAD_DIALOGS = 'LOAD-DIALOGS';
 const SET_CURRENT_DIALOG = 'SET-CURRENT-DIALOG';
-const SET_CURRENT_PHRASE = 'SET-CURRENT-PHRASE';
+const SET_TYPING = 'SET-TYPING';
 
 let initialState = {
     currentDialogId: 0,
     alreadyReadIndexes: [],
+    typing: true,
 
     speakersData: [
         {
@@ -69,10 +70,10 @@ const dialogsReducer = (state = initialState, action) => {
                 ...state,
                 currentDialogId: action.dialogId
             };
-        case SET_CURRENT_PHRASE:
+        case SET_TYPING:
             return {
                 ...state,
-                currentPhrase: action.index
+                typing: action.typingState,
             };
         default:
             return state;
@@ -108,11 +109,13 @@ export const deleteDialog = (dialogId) => {
     };
 };
 
-export const setCurrentPhrase = (index) => {
+export const setTyping = (typingState) => {
     return {
-        type: SET_CURRENT_PHRASE,
-        index
-    };
+        type: SET_TYPING,
+        typingState
+    }
 };
+
+
 
 export default dialogsReducer;
