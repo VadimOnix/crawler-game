@@ -44,14 +44,14 @@ const DialogBox = (props) => {
                             </p >
                         </div>
     }
-    
+
     return (
         <div className = {[classes.dialogBox, props.boxRole].join(' ')}>
             <img className = {classes.avatar} src = {props.spriteSrc} alt = "" />
             <h3 className = {classes.title}>{props.speaker}</h3 >
                 {typingContent}
             <Spring
-                delay = {2000}
+                delay = {1300}
                 from = {{position: 'absolute', opacity: 0}}
                 to = {{opacity: 1}}
             >
