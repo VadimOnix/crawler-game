@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 import classes from './Dialog.module.sass';
 import Typing from 'react-typing-animation';
 import { Spring } from 'react-spring/renderprops-universal';
@@ -24,32 +24,32 @@ const DialogBox = (props) => {
         };
     },[]);
 
-    let typingContent;
-    if (typing) {
-        typingContent = <Typing className = {classes.text}
-                                cursorClassName = {classes.cursor}
-                                speed = {3}
-                                startDelay = {600}
-                                onFinishedTyping = { () => {dispatch(setTyping(false))}}
-                        >
-                            <Typing.Delay ms = {100} />
-                                <p >
-                                    {props.text}
-                                </p >
-                        </Typing >;
-    } else {
-        typingContent = <div className = {classes.text}>
-                            <p >
-                                {props.text}
-                            </p >
-                        </div>
-    }
+  const getTypingContent = useMemo(() => {
+    return typing ?
+      <Typing className={classes.text}
+        cursorClassName={classes.cursor}
+        speed={3}
+        startDelay={600}
+        onFinishedTyping={() => { dispatch(setTyping(false)) }}
+      >
+        <Typing.Delay ms={100} />
+        <p >
+          {props.text}
+        </p >
+      </Typing >
+      :
+      <div className={classes.text}>
+        <p >
+          {props.text}
+        </p >
+      </div>
+  }, [typing])
 
     return (
         <div className = {[classes.dialogBox, props.boxRole].join(' ')}>
             <img className = {classes.avatar} src = {props.spriteSrc} alt = "" />
             <h3 className = {classes.title}>{props.speaker}</h3 >
-                {typingContent}
+                {getTypingContent}
             <Spring
                 delay = {1300}
                 from = {{position: 'absolute', opacity: 0}}
