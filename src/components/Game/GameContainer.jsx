@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { batch, connect } from 'react-redux';
 import Game from './Game';
-import { loadLevel, setGameObjects } from '../../redux/gameReducer';
+import { loadLevel, setGameMode, setGameObjects } from '../../redux/gameReducer';
 import { checkOnGameEvent, getUpdatedGameObjects } from '../../gameCore/controller';
 import CONSTANTS from '../../gameCore/constants';
 import LEVELS from '../../gameCore/levels/LEVELS';
-import { setCurrentDialog } from '../../redux/dialogsReducer';
+import { loadDialogs, setCurrentDialog } from '../../redux/dialogsReducer';
 
 function mapStateToProps(state) {
     return {
+        gameMode: state.game.gameMode,
         gameObjects: state.game.gameObjects,
         level: state.game.level,
         alreadyReadIndexes: state.dialogs.alreadyReadIndexes
@@ -16,7 +17,7 @@ function mapStateToProps(state) {
 }
 
 let mapDispatchToProps = {
-    loadLevel, setGameObjects, setCurrentDialog,
+    loadDialogs, loadLevel, setGameObjects, setCurrentDialog, setGameMode
 };
 
 class GameContainer extends Component {
@@ -30,7 +31,10 @@ class GameContainer extends Component {
     componentDidMount() {
 
         // load firs level
-        this.props.loadLevel(LEVELS[1]);
+        batch(() => {
+            this.props.loadLevel(LEVELS[1]);
+            this.props.loadDialogs(LEVELS[1].dialogs);
+        });
         // bad solution for architecture
         window.addEventListener('keydown', this.handleKeydown);
     }
@@ -40,7 +44,7 @@ class GameContainer extends Component {
     }
 
     render() {
-        return <Game />;
+        return <Game gameMode = {this.props.gameMode} />;
     }
 
     waitGameAnimate = (ms) => {
@@ -55,30 +59,29 @@ class GameContainer extends Component {
      * @param {string} direction (W,N,E,S)
      * */
     move(direction) {
-        // обновить данные по всем игровым объектам на уровне
-        let updatedGameObjects = getUpdatedGameObjects(
-            this.props.gameObjects,
-            {type: 'move', direction},
-            this.props.level
-        );
+            // обновить данные по всем игровым объектам на уровне
+            let updatedGameObjects = getUpdatedGameObjects(
+                this.props.gameObjects,
+                {type: 'move', direction},
+                this.props.level
+            );
 
-        let event = checkOnGameEvent(updatedGameObjects.newGameObjects);
-        batch(() => {
-            if (event.isGameEvent) {
-                if (event.eventObject.type === 'dialog' &&
-                    !this.props.alreadyReadIndexes.includes(event.eventObject.dialogId))
-                {
-                    this.props.setCurrentDialog(event.eventObject.dialogId);
+            let event = checkOnGameEvent(updatedGameObjects.newGameObjects);
+            batch(() => {
+                if (event.isGameEvent) {
+                    if (event.eventObject.type === 'dialog' &&
+                        !this.props.alreadyReadIndexes.includes(event.eventObject.dialogId)) {
+                        this.props.setGameMode('speaking');
+                        this.props.setCurrentDialog(event.eventObject.dialogId);
+                    }
                 }
-            }
-            this.props.setGameObjects(updatedGameObjects.newGameObjects);
-        });
-
+                this.props.setGameObjects(updatedGameObjects.newGameObjects);
+            });
     }
 
 
     handleKeydown(e) {
-        if (this.reservedKeys.includes(e.keyCode) && !this.idleAnimate) {
+        if (this.reservedKeys.includes(e.keyCode) && !this.idleAnimate && this.props.gameMode === 'exploring') {
             this.idleAnimate = true;
             e.preventDefault();
             this.waitGameAnimate(CONSTANTS.GAME_ANIMATE_SPEED)

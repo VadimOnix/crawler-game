@@ -2,12 +2,11 @@ const ADD_READ_DIALOG = 'ADD-READ-DIALOG';
 const DELETE_DIALOG = 'DELETE-DIALOG';
 const LOAD_DIALOGS = 'LOAD-DIALOGS';
 const SET_CURRENT_DIALOG = 'SET-CURRENT-DIALOG';
-
+const SET_CURRENT_PHRASE = 'SET-CURRENT-PHRASE';
 
 let initialState = {
     currentDialogId: 0,
     alreadyReadIndexes: [],
-
 
     speakersData: [
         {
@@ -48,8 +47,10 @@ const dialogsReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_READ_DIALOG:
             return {
-              ...state,
-                alreadyReadIndexes: [...state.alreadyReadIndexes, action.dialogId],
+                ...state,
+                alreadyReadIndexes: state.dialogList[action.dialogId].isDisposable
+                    ? [...state.alreadyReadIndexes, action.dialogId]
+                    : state.alreadyReadIndexes,
                 currentDialogId: 0,
             };
         case LOAD_DIALOGS:
@@ -68,6 +69,11 @@ const dialogsReducer = (state = initialState, action) => {
                 ...state,
                 currentDialogId: action.dialogId
             };
+        case SET_CURRENT_PHRASE:
+            return {
+                ...state,
+                currentPhrase: action.index
+            };
         default:
             return state;
     }
@@ -78,7 +84,7 @@ export const addReadDialog = (dialogId) => {
     return {
         type: ADD_READ_DIALOG,
         dialogId
-    }
+    };
 };
 
 export const loadDialogs = (dialogsData) => {
@@ -99,6 +105,13 @@ export const deleteDialog = (dialogId) => {
     return {
         type: DELETE_DIALOG,
         dialogId
+    };
+};
+
+export const setCurrentPhrase = (index) => {
+    return {
+        type: SET_CURRENT_PHRASE,
+        index
     };
 };
 

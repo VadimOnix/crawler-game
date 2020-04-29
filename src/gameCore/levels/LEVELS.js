@@ -11,7 +11,7 @@ export const LEVELS = {
         level: 1,
         levelMap: [
             [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -45,6 +45,15 @@ export const LEVELS = {
                 left: 81,
                 sizeX: CONSTANTS.SPRITE_SIZE,
                 sizeY: CONSTANTS.SPRITE_SIZE,
+            },
+            2: {
+                type: 'ground',
+                walkable: true,
+                bgUrl: ground_sheet,
+                top: 656,
+                left: 80,
+                sizeX: CONSTANTS.SPRITE_SIZE,
+                sizeY: CONSTANTS.SPRITE_SIZE,
             }
         },
         dialogs: {
@@ -69,15 +78,15 @@ export const LEVELS = {
                         },
                         {
                             speaker: 'hero',
-                            text: 'Тестирование второго диалогвого окна'
+                            text: 'Тестирование второго диалогвого окна из 4'
                         },
                         {
                             speaker: 'enemy',
-                            text: 'Тестирование первого диалогвого окна из '
+                            text: 'Тестирование третьего диалогвого противника окна из 4'
                         },
                         {
                             speaker: 'hero',
-                            text: 'Тестирование первого диалогвого окна из '
+                            text: 'Тестирование последнего диалогвого окна из 4'
                         },
                     ]
                 }
