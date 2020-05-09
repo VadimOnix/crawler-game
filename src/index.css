@@ -1,12 +1,4 @@
-@font-face {
-    font-family: "Cyberfunk";
-    src: url("/assets/fonts/Cyberfunk/Cyberfunk.eot"); /* IE9*/
-    src: url("/assets/fonts/Cyberfunk/Cyberfunk.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
-    url("/assets/fonts/Cyberfunk/Cyberfunk.woff2") format("woff2"), /* chrome、firefox */
-    url("/assets/fonts/Cyberfunk/Cyberfunk.woff") format("woff"), /* chrome、firefox */
-    url("/assets/fonts/Cyberfunk/Cyberfunk.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-    url("/assets/fonts/Cyberfunk/Cyberfunk.svg#Cyberfunk") format("svg"); /* iOS 4.1- */
-}
+@import "assets/fonts/CyberfunkImport/Cyberfunk.css";
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

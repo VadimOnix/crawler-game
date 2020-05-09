@@ -1,5 +1,6 @@
 import React from 'react';
 import * as ReactDOM from 'react-dom';
+import './assets/fonts/CyberfunkImport/20a15dae14a6505716c6e41e71fb7d7e.ttf';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
