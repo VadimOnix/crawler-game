@@ -43,7 +43,7 @@ const DialogBox = (props) => {
           {props.text}
         </p >
       </div>
-  }, [typing])
+  }, [typing]);
 
     return (
         <div className = {[classes.dialogBox, props.boxRole].join(' ')}>

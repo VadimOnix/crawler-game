@@ -3,6 +3,7 @@ import GameObjectsContainer from './GameObjects/GameObjectsContainer';
 import WorldMapContainer from './WorldMap/WorldMapContainer';
 import classes from './Game.module.sass';
 import Dialog from './Dialog/Dialog';
+import Battle from '../Battle/Battle';
 
 const Game = (props) => {
 
@@ -10,8 +11,9 @@ const Game = (props) => {
 
     return (
         <div className = {classes.gameContainer}>
-            <WorldMapContainer />
-            <GameObjectsContainer />
+            <Battle/>
+            {/*<WorldMapContainer />*/}
+            {/*<GameObjectsContainer />*/}
             {dialog}
         </div >
     );
