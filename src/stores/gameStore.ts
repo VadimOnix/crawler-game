@@ -21,12 +21,11 @@ export const useGameStore = create<GameStore>()(
             // сущности приходят из данных уровня (LEVELS[n].gameObjects) при loadLevel
             gameObjects: [],
 
-            loadLevel: (level) => set(
-                {level: level.level, gameObjects: level.gameObjects},
-                false, 'loadLevel'),
-            setGameMode: (gameMode) => set({gameMode}, false, 'setGameMode'),
-            setGameObjects: (gameObjects) => set({gameObjects}, false, 'setGameObjects'),
+            loadLevel: (level) =>
+                set({ level: level.level, gameObjects: level.gameObjects }, false, 'loadLevel'),
+            setGameMode: (gameMode) => set({ gameMode }, false, 'setGameMode'),
+            setGameObjects: (gameObjects) => set({ gameObjects }, false, 'setGameObjects'),
         }),
-        {name: 'game'},
+        { name: 'game' },
     ),
 );

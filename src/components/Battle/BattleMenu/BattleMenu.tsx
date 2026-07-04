@@ -2,9 +2,9 @@ import HeroBar from './HeroBar/HeroBar';
 
 const BattleMenu = () => {
     return (
-        <div >
-            <HeroBar/>
-        </div >
+        <div>
+            <HeroBar />
+        </div>
     );
 };
 

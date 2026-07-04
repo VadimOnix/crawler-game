@@ -5,14 +5,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```sh
-npm install        # Node >= 20.19 required (.nvmrc pins 22)
-npm start          # dev server with HMR at http://localhost:3000 (alias: npm run dev)
-npm run typecheck  # tsc --noEmit (Vite only transpiles, it does not check types)
-npm run build      # typecheck + production build to dist/
-npm run preview    # serve the production build locally
+npm install           # Node >= 20.19 required (.nvmrc pins 22)
+npm start             # dev server with HMR at http://localhost:3000 (alias: npm run dev)
+npm run lint          # eslint . --max-warnings 0 (flat config in eslint.config.js)
+npm run format        # prettier --write . (.sass files are NOT formatted — indented syntax is unsupported)
+npm run format:check  # prettier --check .
+npm run typecheck     # tsc --noEmit (Vite only transpiles, it does not check types)
+npm run build         # typecheck + production build to dist/
+npm run preview       # serve the production build locally
 ```
 
-There is no test runner or linter configured. CI (`.github/workflows/ci.yml`) runs typecheck + build on every push to master and on pull requests.
+There is no test runner configured. CI (`.github/workflows/ci.yml`) runs lint + format check + typecheck + build on every push to master and on pull requests. Code style is enforced by Prettier (4-space indent, single quotes, trailing commas); ESLint layers typescript-eslint recommended plus react-hooks and react-refresh rules (unused args/vars are allowed only with a `_` prefix).
 
 ## Overview
 

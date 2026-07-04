@@ -4,8 +4,8 @@ import BattleMenu from './BattleMenu/BattleMenu';
 const Battle = () => {
     return (
         <>
-            <BattleLayout/>
-            <BattleMenu/>
+            <BattleLayout />
+            <BattleMenu />
         </>
     );
 };

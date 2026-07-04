@@ -7,11 +7,11 @@ import { useGameStore } from '../../stores/gameStore';
 import { useDialogsStore } from '../../stores/dialogsStore';
 
 const GameContainer = () => {
-    const gameMode = useGameStore(state => state.gameMode);
+    const gameMode = useGameStore((state) => state.gameMode);
 
     // загрузка текущего уровня при входе на игровой экран
     useEffect(() => {
-        const {level, loadLevel} = useGameStore.getState();
+        const { level, loadLevel } = useGameStore.getState();
         const levelData = LEVELS[level];
         loadLevel(levelData);
         useDialogsStore.getState().loadDialogs(levelData.dialogs);
@@ -23,22 +23,24 @@ const GameContainer = () => {
         let idleAnimate = false;
 
         const move = (direction: (typeof KEY_TO_DIRECTION)[string]) => {
-            const {level, gameObjects, setGameMode, setGameObjects} = useGameStore.getState();
+            const { level, gameObjects, setGameMode, setGameObjects } = useGameStore.getState();
 
             // обновить данные по всем игровым объектам на уровне
             const updatedGameObjects = getUpdatedGameObjects(
                 gameObjects,
-                {type: 'move', direction},
-                LEVELS[level]
+                { type: 'move', direction },
+                LEVELS[level],
             );
 
             const event = checkOnGameEvent(updatedGameObjects.newGameObjects);
-            const {alreadyReadIndexes, setCurrentDialog} = useDialogsStore.getState();
-            if (event.isGameEvent &&
+            const { alreadyReadIndexes, setCurrentDialog } = useDialogsStore.getState();
+            if (
+                event.isGameEvent &&
                 event.eventObject !== null &&
                 event.eventObject.type === OBJECT_TYPES.DIALOG &&
                 event.eventObject.dialogId !== undefined &&
-                !alreadyReadIndexes.includes(event.eventObject.dialogId)) {
+                !alreadyReadIndexes.includes(event.eventObject.dialogId)
+            ) {
                 setGameMode(GAME_MODES.SPEAKING);
                 setCurrentDialog(event.eventObject.dialogId);
             }
@@ -47,7 +49,11 @@ const GameContainer = () => {
 
         const handleKeydown = (e: KeyboardEvent) => {
             const direction = KEY_TO_DIRECTION[e.key];
-            if (!direction || idleAnimate || useGameStore.getState().gameMode !== GAME_MODES.EXPLORING) {
+            if (
+                !direction ||
+                idleAnimate ||
+                useGameStore.getState().gameMode !== GAME_MODES.EXPLORING
+            ) {
                 return;
             }
             idleAnimate = true;
@@ -62,7 +68,7 @@ const GameContainer = () => {
         return () => window.removeEventListener('keydown', handleKeydown);
     }, []);
 
-    return <Game gameMode = {gameMode} />;
+    return <Game gameMode={gameMode} />;
 };
 
 export default GameContainer;

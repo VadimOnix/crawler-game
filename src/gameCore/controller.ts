@@ -7,7 +7,7 @@ import type { Coords, GameAction, GameEventCheck, GameObject, Level, TileAsset }
  * не выходя за границы карты.
  */
 export const calculateNewCoords = (prevCoords: Coords, direction: Direction): Coords => {
-    const newCoords = {...prevCoords};
+    const newCoords = { ...prevCoords };
     switch (direction) {
         case DIRECTIONS.WEST:
             if (prevCoords.x > 0) {
@@ -42,9 +42,7 @@ const calculateWalkIndex = (gameObject: GameObject, direction: Direction): numbe
     if (direction !== gameObject.prevDirection) {
         return 1;
     }
-    return gameObject.walkIndex < CONSTANTS.PHASE_COUNT_ANIMATION
-        ? gameObject.walkIndex + 1
-        : 0;
+    return gameObject.walkIndex < CONSTANTS.PHASE_COUNT_ANIMATION ? gameObject.walkIndex + 1 : 0;
 };
 
 export interface GameTickResult {
@@ -65,7 +63,7 @@ export const getUpdatedGameObjects = (
 ): GameTickResult => {
     let heroChangedPosition = true;
 
-    const newGameObjects = gameObjects.map(obj => {
+    const newGameObjects = gameObjects.map((obj) => {
         switch (action.type) {
             case 'move': {
                 if (obj.type !== OBJECT_TYPES.HERO) {
@@ -75,8 +73,8 @@ export const getUpdatedGameObjects = (
 
                 const newCoords = calculateNewCoords(obj.coords, action.direction);
                 const canMove = isWalkable(newCoords, level.levelMap, level.levelAssets);
-                const positionChanged = canMove &&
-                    (newCoords.x !== obj.coords.x || newCoords.y !== obj.coords.y);
+                const positionChanged =
+                    canMove && (newCoords.x !== obj.coords.x || newCoords.y !== obj.coords.y);
 
                 if (!positionChanged) {
                     heroChangedPosition = false;
@@ -98,8 +96,8 @@ export const getUpdatedGameObjects = (
     return {
         newGameObjects,
         info: {
-            heroChangedPosition
-        }
+            heroChangedPosition,
+        },
     };
 };
 
@@ -107,18 +105,20 @@ export const getUpdatedGameObjects = (
  * Ищет событийный объект (диалог, битва) на клетке героя.
  */
 export const checkOnGameEvent = (gameObjects: GameObject[]): GameEventCheck => {
-    const hero = gameObjects.find(obj => obj.type === OBJECT_TYPES.HERO);
+    const hero = gameObjects.find((obj) => obj.type === OBJECT_TYPES.HERO);
     if (!hero) {
-        return {isGameEvent: false, eventObject: null};
+        return { isGameEvent: false, eventObject: null };
     }
     const heroPos = hero.coords;
-    const eventObject = gameObjects.find(obj =>
-        (obj.type === OBJECT_TYPES.DIALOG || obj.type === OBJECT_TYPES.BATTLE) &&
-        obj.coords.x === heroPos.x && obj.coords.y === heroPos.y
+    const eventObject = gameObjects.find(
+        (obj) =>
+            (obj.type === OBJECT_TYPES.DIALOG || obj.type === OBJECT_TYPES.BATTLE) &&
+            obj.coords.x === heroPos.x &&
+            obj.coords.y === heroPos.y,
     );
     return {
         isGameEvent: eventObject !== undefined,
-        eventObject: eventObject ?? null
+        eventObject: eventObject ?? null,
     };
 };
 

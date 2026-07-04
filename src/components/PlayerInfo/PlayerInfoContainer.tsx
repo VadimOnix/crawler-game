@@ -3,9 +3,7 @@ import PlayerInfo from './PlayerInfo';
 
 class PlayerInfoContainer extends Component {
     render() {
-        return (
-            <PlayerInfo/>
-        );
+        return <PlayerInfo />;
     }
 }
 
