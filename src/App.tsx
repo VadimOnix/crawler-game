@@ -12,26 +12,26 @@ interface AppProps {
 
 const App = (props: AppProps) => {
     const appStyle = {
-        backgroundImage: `url('${props.backgroundImageUrl}')`
+        backgroundImage: `url('${props.backgroundImageUrl}')`,
     };
 
-    const content = props.isLoading
-        ? <Preloader />
-        : (<Routes >
-            <Route path = "/" element = {<MenuContainer />} />
-            <Route path = "/game" element = {<GameContainer />} />
-            <Route path = "/character" element = {<PlayerInfoContainer />} />
-            <Route path = "/about" element = {<DeveloperInfoContainer />} />
-        </Routes >);
+    const content = props.isLoading ? (
+        <Preloader />
+    ) : (
+        <Routes>
+            <Route path="/" element={<MenuContainer />} />
+            <Route path="/game" element={<GameContainer />} />
+            <Route path="/character" element={<PlayerInfoContainer />} />
+            <Route path="/about" element={<DeveloperInfoContainer />} />
+        </Routes>
+    );
 
     return (
-        <BrowserRouter >
-            <div className = "App" style = {appStyle}>
-                <div className = "AppWrapper">
-                    {content}
-                </div >
-            </div >
-        </BrowserRouter >
+        <BrowserRouter>
+            <div className="App" style={appStyle}>
+                <div className="AppWrapper">{content}</div>
+            </div>
+        </BrowserRouter>
     );
 };
 

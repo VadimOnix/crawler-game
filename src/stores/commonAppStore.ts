@@ -22,17 +22,18 @@ export const useCommonAppStore = create<CommonAppStore>()(
             menuOptions: [
                 {
                     label: 'New game',
-                    link: '/game'
+                    link: '/game',
                 },
                 {
                     label: 'About developer',
-                    link: '/about'
-                }
+                    link: '/about',
+                },
             ],
 
-            switchPreloader: (status) => set({isLoading: status}, false, 'switchPreloader'),
-            changeBackgroundImage: (url) => set({backgroundImageUrl: url}, false, 'changeBackgroundImage'),
+            switchPreloader: (status) => set({ isLoading: status }, false, 'switchPreloader'),
+            changeBackgroundImage: (url) =>
+                set({ backgroundImageUrl: url }, false, 'changeBackgroundImage'),
         }),
-        {name: 'commonApp'},
+        { name: 'commonApp' },
     ),
 );

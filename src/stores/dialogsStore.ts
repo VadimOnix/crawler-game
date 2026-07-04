@@ -24,22 +24,27 @@ export const useDialogsStore = create<DialogsStore>()(
             speakersData: [],
             dialogList: {},
 
-            loadDialogs: (dialogsData) => set(
-                {speakersData: dialogsData.speakersData, dialogList: dialogsData.dialogList},
-                false, 'loadDialogs'),
-            setCurrentDialog: (dialogId) => set(
-                {currentDialogId: dialogId, typing: true},
-                false, 'setCurrentDialog'),
-            addReadDialog: (dialogId) => set(
-                (state) => ({
-                    alreadyReadIndexes: state.dialogList[dialogId].isDisposable
-                        ? [...state.alreadyReadIndexes, dialogId]
-                        : state.alreadyReadIndexes,
-                    currentDialogId: 0,
-                }),
-                false, 'addReadDialog'),
-            setTyping: (typingState) => set({typing: typingState}, false, 'setTyping'),
+            loadDialogs: (dialogsData) =>
+                set(
+                    { speakersData: dialogsData.speakersData, dialogList: dialogsData.dialogList },
+                    false,
+                    'loadDialogs',
+                ),
+            setCurrentDialog: (dialogId) =>
+                set({ currentDialogId: dialogId, typing: true }, false, 'setCurrentDialog'),
+            addReadDialog: (dialogId) =>
+                set(
+                    (state) => ({
+                        alreadyReadIndexes: state.dialogList[dialogId].isDisposable
+                            ? [...state.alreadyReadIndexes, dialogId]
+                            : state.alreadyReadIndexes,
+                        currentDialogId: 0,
+                    }),
+                    false,
+                    'addReadDialog',
+                ),
+            setTyping: (typingState) => set({ typing: typingState }, false, 'setTyping'),
         }),
-        {name: 'dialogs'},
+        { name: 'dialogs' },
     ),
 );

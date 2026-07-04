@@ -21,21 +21,23 @@ const getScreenPosition = (gameObject: GameObjectData, spriteSize: number): [num
 };
 
 const GameObjectsContainer = () => {
-    const gameObjects = useGameStore(state => state.gameObjects);
+    const gameObjects = useGameStore((state) => state.gameObjects);
 
     // объекты без спрайта (триггеры диалогов, заглушки) не рендерим
     return (
         <>
-            {gameObjects.filter(obj => obj.sprite).map(obj => (
-                <GameObject
-                    position = {getScreenPosition(obj, CONSTANTS.SPRITE_SIZE)}
-                    width = {CONSTANTS.SPRITE_SIZE}
-                    height = {CONSTANTS.SPRITE_SIZE}
-                    key = {obj.id}
-                    sprite = {obj.sprite}
-                    spritePosition = {getSpritePosition(obj, CONSTANTS.SPRITE_SIZE)}
-                />
-            ))}
+            {gameObjects
+                .filter((obj) => obj.sprite)
+                .map((obj) => (
+                    <GameObject
+                        position={getScreenPosition(obj, CONSTANTS.SPRITE_SIZE)}
+                        width={CONSTANTS.SPRITE_SIZE}
+                        height={CONSTANTS.SPRITE_SIZE}
+                        key={obj.id}
+                        sprite={obj.sprite}
+                        spritePosition={getSpritePosition(obj, CONSTANTS.SPRITE_SIZE)}
+                    />
+                ))}
         </>
     );
 };

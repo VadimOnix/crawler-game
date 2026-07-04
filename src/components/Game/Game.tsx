@@ -12,13 +12,13 @@ interface GameProps {
 
 const Game = (props: GameProps) => {
     return (
-        <div className = {classes.gameContainer}>
+        <div className={classes.gameContainer}>
             <WorldMapContainer />
             <GameObjectsContainer />
-            <div className = {classes.hudFrame} />
+            <div className={classes.hudFrame} />
             {props.gameMode === GAME_MODES.SPEAKING && <Dialog />}
             {props.gameMode === GAME_MODES.BATTLE && <Battle />}
-        </div >
+        </div>
     );
 };
 

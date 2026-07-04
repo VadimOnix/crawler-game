@@ -9,18 +9,22 @@ interface MenuProps {
 
 const Menu = (props: MenuProps) => {
     const optionsList = props.menuOptions.map((o, index) => (
-        <NavLink key = {index} className = {({isActive}) => isActive ? classes.menuItem : undefined} to = {o.link}>
-            <Button text = {o.label} />
-        </NavLink >
+        <NavLink
+            key={index}
+            className={({ isActive }) => (isActive ? classes.menuItem : undefined)}
+            to={o.link}
+        >
+            <Button text={o.label} />
+        </NavLink>
     ));
 
     return (
-        <div className = {classes.menuBackground}>
-            <h1 className = {classes.title} data-text = "Crawler">Crawler</h1 >
-            <div className = {classes.menuContainer}>
-                {optionsList}
-            </div >
-        </div >
+        <div className={classes.menuBackground}>
+            <h1 className={classes.title} data-text="Crawler">
+                Crawler
+            </h1>
+            <div className={classes.menuContainer}>{optionsList}</div>
+        </div>
     );
 };
 

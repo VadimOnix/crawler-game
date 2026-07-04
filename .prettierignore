@@ -1,0 +1,4 @@
+# Prettier не поддерживает indented-синтаксис .sass
+*.sass
+dist/
+package-lock.json

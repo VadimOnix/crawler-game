@@ -1,9 +1,5 @@
 const BattleLayout = () => {
-    return (
-        <div >
-
-        </div >
-    );
+    return <div></div>;
 };
 
 export default BattleLayout;

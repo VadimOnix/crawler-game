@@ -16,7 +16,14 @@ interface TypingTextProps {
 /**
  * Печатает текст посимвольно (замена заброшенной react-typing-animation).
  */
-const TypingText = ({text, speed = 50, startDelay = 0, onFinishedTyping, className, cursorClassName}: TypingTextProps) => {
+const TypingText = ({
+    text,
+    speed = 50,
+    startDelay = 0,
+    onFinishedTyping,
+    className,
+    cursorClassName,
+}: TypingTextProps) => {
     const [visibleCount, setVisibleCount] = useState(0);
     const isFinished = visibleCount >= text.length;
 
@@ -28,7 +35,7 @@ const TypingText = ({text, speed = 50, startDelay = 0, onFinishedTyping, classNa
         let intervalId: ReturnType<typeof setInterval> | undefined;
         const timeoutId = setTimeout(() => {
             intervalId = setInterval(() => {
-                setVisibleCount(prev => {
+                setVisibleCount((prev) => {
                     if (prev >= text.length) {
                         clearInterval(intervalId);
                         return prev;
@@ -51,12 +58,12 @@ const TypingText = ({text, speed = 50, startDelay = 0, onFinishedTyping, classNa
     }, [isFinished]);
 
     return (
-        <div className = {className}>
-            <p >
+        <div className={className}>
+            <p>
                 {text.slice(0, visibleCount)}
-                {!isFinished && <span className = {cursorClassName}>|</span >}
-            </p >
-        </div >
+                {!isFinished && <span className={cursorClassName}>|</span>}
+            </p>
+        </div>
     );
 };
 

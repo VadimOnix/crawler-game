@@ -5,11 +5,7 @@ interface ProgressBarProps {
 }
 
 const ProgressBar = (_props: ProgressBarProps) => {
-    return (
-        <div className="progressBar">
-
-        </div >
-    );
+    return <div className="progressBar"></div>;
 };
 
 export default ProgressBar;
