@@ -10,12 +10,13 @@ npm start             # dev server with HMR at http://localhost:3000 (alias: npm
 npm run lint          # eslint . --max-warnings 0 (flat config in eslint.config.js)
 npm run format        # prettier --write . (.sass files are NOT formatted — indented syntax is unsupported)
 npm run format:check  # prettier --check .
+npm test              # vitest run (co-located *.test.ts files; watch mode: npm run test:watch)
 npm run typecheck     # tsc --noEmit (Vite only transpiles, it does not check types)
 npm run build         # typecheck + production build to dist/
 npm run preview       # serve the production build locally
 ```
 
-There is no test runner configured. CI (`.github/workflows/ci.yml`) runs lint + format check + typecheck + build on every push to master and on pull requests. Code style is enforced by Prettier (4-space indent, single quotes, trailing commas); ESLint layers typescript-eslint recommended plus react-hooks and react-refresh rules (unused args/vars are allowed only with a `_` prefix).
+Tests are Vitest, co-located with the code (`src/**/*.test.ts`) — pure gameCore logic and Zustand stores need no DOM, so there is no jsdom setup; reset stores in `beforeEach` via `useXxxStore.setState(initialState, true)`. CI (`.github/workflows/ci.yml`) runs lint + format check + typecheck + tests + build on every push to master and on pull requests. Code style is enforced by Prettier (4-space indent, single quotes, trailing commas); ESLint layers typescript-eslint recommended plus react-hooks and react-refresh rules (unused args/vars are allowed only with a `_` prefix).
 
 ## Overview
 
