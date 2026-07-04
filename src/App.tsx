@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import MenuContainer from './components/MainMenu/MenuContainer';
 import GameContainer from './components/Game/GameContainer';
 import PlayerInfoContainer from './components/PlayerInfo/PlayerInfoContainer';
@@ -27,11 +27,13 @@ const App = (props: AppProps) => {
     );
 
     return (
-        <BrowserRouter>
+        // HashRouter вместо BrowserRouter: статический хостинг (GitHub Pages)
+        // не умеет отдавать index.html по произвольным путям SPA
+        <HashRouter>
             <div className="App" style={appStyle}>
                 <div className="AppWrapper">{content}</div>
             </div>
-        </BrowserRouter>
+        </HashRouter>
     );
 };
 

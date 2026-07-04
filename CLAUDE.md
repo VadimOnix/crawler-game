@@ -20,7 +20,9 @@ Tests are Vitest, co-located with the code (`src/**/*.test.ts`) — pure gameCor
 
 Releases are tag-driven: pushing a `v*` tag (e.g. `npm version minor && git push --follow-tags`) triggers `.github/workflows/release.yml`, which re-runs checks, builds, and publishes a GitHub Release with auto-generated notes and a zipped `dist/`. Dependabot opens weekly PRs for npm (minor+patch grouped into one PR) and GitHub Actions updates.
 
-A husky pre-commit hook runs lint-staged (ESLint + Prettier on staged files); `npm install` wires it up via the `prepare` script. Code style is enforced by Prettier (4-space indent, single quotes, trailing commas); ESLint layers typescript-eslint recommended plus react-hooks and react-refresh rules (unused args/vars are allowed only with a `_` prefix).
+A husky pre-commit hook runs lint-staged (ESLint + Prettier on staged files); `npm install` wires it up via the `prepare` script.
+
+Every push to master also deploys the game to GitHub Pages (`.github/workflows/deploy.yml`). The Vite build uses `base: './'` (relative asset paths) and the router is hash-based, so the bundle works under any URL prefix without rebuilding. Code style is enforced by Prettier (4-space indent, single quotes, trailing commas); ESLint layers typescript-eslint recommended plus react-hooks and react-refresh rules (unused args/vars are allowed only with a `_` prefix).
 
 ## Overview
 
@@ -30,7 +32,7 @@ TypeScript conventions: domain types (`GameObject`, `Level`, `TileAsset`, dialog
 
 ## Architecture
 
-Entry flow: `index.html` → `src/main.tsx` (creates the root; Zustand needs no provider) → `AppContainer` (shows a fake 2s preloader) → `App.tsx` (`BrowserRouter` with routes `/` menu, `/game`, `/character`, `/about`).
+Entry flow: `index.html` → `src/main.tsx` (creates the root; Zustand needs no provider) → `AppContainer` (shows a fake 2s preloader) → `App.tsx` (`HashRouter` with routes `/` menu, `/game`, `/character`, `/about` — hash-based so the SPA works on GitHub Pages; in the browser they look like `/#/game`).
 
 The codebase splits into three layers:
 
