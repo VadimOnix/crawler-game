@@ -2,6 +2,8 @@
 
 A small browser crawler game written in TypeScript, built with React 19 and [Vite](https://vite.dev/).
 
+**Play online:** https://vadimonix.github.io/crawler-game/ (deployed automatically from `master` via GitHub Pages; the URL follows the repository name).
+
 ## Requirements
 
 - Node.js 20.19+ (an active LTS release — 22 or 24 — is recommended, see `.nvmrc`)
@@ -57,6 +59,10 @@ Serves the production build from `dist` locally for a final check before deployi
 - **CI** (`.github/workflows/ci.yml`): lint, format check, typecheck, tests, and build run on every push to `master` and on pull requests.
 - **Dependabot**: weekly dependency updates (minor and patch npm updates grouped into a single PR).
 
+## Deployment
+
+Every push to `master` triggers `.github/workflows/deploy.yml`, which builds the game and publishes it to GitHub Pages. The build uses a relative base path (`base: './'` in `vite.config.ts`) and a `HashRouter`, so it works under any URL prefix — renaming the repository or attaching a custom domain requires no code changes.
+
 ## Releases
 
 Releases are tag-driven. Bump the version and push the tag:
@@ -67,3 +73,7 @@ git push --follow-tags
 ```
 
 The `Release` workflow re-runs all checks, builds the game, and publishes a GitHub Release with auto-generated notes and a zipped `dist/`.
+
+## License
+
+[MIT](./LICENSE)
