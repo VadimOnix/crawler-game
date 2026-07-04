@@ -1,7 +1,7 @@
 import GameObject from './GameObject';
 import CONSTANTS, { DIRECTIONS } from '../../../gameCore/constants';
 import type { GameObject as GameObjectData } from '../../../gameCore/types';
-import { useAppSelector } from '../../../redux/hooks';
+import { useGameStore } from '../../../stores/gameStore';
 
 // Ряд спрайт-листа персонажа для каждого направления взгляда
 const DIRECTION_TO_SHEET_ROW = {
@@ -21,7 +21,7 @@ const getScreenPosition = (gameObject: GameObjectData, spriteSize: number): [num
 };
 
 const GameObjectsContainer = () => {
-    const gameObjects = useAppSelector(state => state.game.gameObjects);
+    const gameObjects = useGameStore(state => state.gameObjects);
 
     // объекты без спрайта (триггеры диалогов, заглушки) не рендерим
     return (

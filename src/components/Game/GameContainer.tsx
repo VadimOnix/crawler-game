@@ -1,97 +1,68 @@
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import type { ConnectedProps } from 'react-redux';
+import { useEffect } from 'react';
 import Game from './Game';
-import { loadLevel, setGameMode, setGameObjects } from '../../redux/gameReducer';
 import { checkOnGameEvent, getUpdatedGameObjects } from '../../gameCore/controller';
 import CONSTANTS, { GAME_MODES, KEY_TO_DIRECTION, OBJECT_TYPES } from '../../gameCore/constants';
-import type { Direction } from '../../gameCore/constants';
 import LEVELS from '../../gameCore/levels/LEVELS';
-import { loadDialogs, setCurrentDialog } from '../../redux/dialogsReducer';
-import type { RootState } from '../../redux/Store';
+import { useGameStore } from '../../stores/gameStore';
+import { useDialogsStore } from '../../stores/dialogsStore';
 
-function mapStateToProps(state: RootState) {
-    return {
-        gameMode: state.game.gameMode,
-        gameObjects: state.game.gameObjects,
-        level: state.game.level,
-        alreadyReadIndexes: state.dialogs.alreadyReadIndexes
-    };
-}
+const GameContainer = () => {
+    const gameMode = useGameStore(state => state.gameMode);
 
-const mapDispatchToProps = {
-    loadDialogs, loadLevel, setGameObjects, setCurrentDialog, setGameMode
+    // загрузка текущего уровня при входе на игровой экран
+    useEffect(() => {
+        const {level, loadLevel} = useGameStore.getState();
+        const levelData = LEVELS[level];
+        loadLevel(levelData);
+        useDialogsStore.getState().loadDialogs(levelData.dialogs);
+    }, []);
+
+    // игровой цикл: обработчик стабилен, актуальное состояние читается
+    // из сторов императивно — без протухших замыканий и переподписок
+    useEffect(() => {
+        let idleAnimate = false;
+
+        const move = (direction: (typeof KEY_TO_DIRECTION)[string]) => {
+            const {level, gameObjects, setGameMode, setGameObjects} = useGameStore.getState();
+
+            // обновить данные по всем игровым объектам на уровне
+            const updatedGameObjects = getUpdatedGameObjects(
+                gameObjects,
+                {type: 'move', direction},
+                LEVELS[level]
+            );
+
+            const event = checkOnGameEvent(updatedGameObjects.newGameObjects);
+            const {alreadyReadIndexes, setCurrentDialog} = useDialogsStore.getState();
+            if (event.isGameEvent &&
+                event.eventObject !== null &&
+                event.eventObject.type === OBJECT_TYPES.DIALOG &&
+                event.eventObject.dialogId !== undefined &&
+                !alreadyReadIndexes.includes(event.eventObject.dialogId)) {
+                setGameMode(GAME_MODES.SPEAKING);
+                setCurrentDialog(event.eventObject.dialogId);
+            }
+            setGameObjects(updatedGameObjects.newGameObjects);
+        };
+
+        const handleKeydown = (e: KeyboardEvent) => {
+            const direction = KEY_TO_DIRECTION[e.key];
+            if (!direction || idleAnimate || useGameStore.getState().gameMode !== GAME_MODES.EXPLORING) {
+                return;
+            }
+            idleAnimate = true;
+            e.preventDefault();
+            setTimeout(() => {
+                idleAnimate = false;
+            }, CONSTANTS.GAME_ANIMATE_SPEED);
+            move(direction);
+        };
+
+        window.addEventListener('keydown', handleKeydown);
+        return () => window.removeEventListener('keydown', handleKeydown);
+    }, []);
+
+    return <Game gameMode = {gameMode} />;
 };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type GameContainerProps = ConnectedProps<typeof connector>;
-
-class GameContainer extends Component<GameContainerProps> {
-    private idleAnimate = false;
-
-    constructor(props: GameContainerProps) {
-        super(props);
-        this.handleKeydown = this.handleKeydown.bind(this);
-    }
-
-    componentDidMount() {
-        const level = LEVELS[this.props.level];
-        this.props.loadLevel(level);
-        this.props.loadDialogs(level.dialogs);
-        // bad solution for architecture
-        window.addEventListener('keydown', this.handleKeydown);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleKeydown);
-    }
-
-    render() {
-        return <Game gameMode = {this.props.gameMode} />;
-    }
-
-    waitGameAnimate = (ms: number): Promise<void> => {
-        return new Promise((resolve => {
-            setTimeout(() => {
-                resolve();
-            }, ms);
-        }));
-    };
-
-    move(direction: Direction) {
-        // обновить данные по всем игровым объектам на уровне
-        const updatedGameObjects = getUpdatedGameObjects(
-            this.props.gameObjects,
-            {type: 'move', direction},
-            LEVELS[this.props.level]
-        );
-
-        const event = checkOnGameEvent(updatedGameObjects.newGameObjects);
-        if (event.isGameEvent &&
-            event.eventObject !== null &&
-            event.eventObject.type === OBJECT_TYPES.DIALOG &&
-            event.eventObject.dialogId !== undefined &&
-            !this.props.alreadyReadIndexes.includes(event.eventObject.dialogId)) {
-            this.props.setGameMode(GAME_MODES.SPEAKING);
-            this.props.setCurrentDialog(event.eventObject.dialogId);
-        }
-        this.props.setGameObjects(updatedGameObjects.newGameObjects);
-    }
-
-
-    handleKeydown(e: KeyboardEvent) {
-        const direction = KEY_TO_DIRECTION[e.key];
-        if (direction && !this.idleAnimate && this.props.gameMode === GAME_MODES.EXPLORING) {
-            this.idleAnimate = true;
-            e.preventDefault();
-            this.waitGameAnimate(CONSTANTS.GAME_ANIMATE_SPEED)
-                .then(() => {
-                    this.idleAnimate = false;
-                });
-            this.move(direction);
-        }
-    }
-}
-
-export default connector(GameContainer);
+export default GameContainer;

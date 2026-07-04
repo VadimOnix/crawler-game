@@ -2,10 +2,9 @@ import { useMemo, useCallback, useEffect, useState } from 'react';
 import classes from './Dialog.module.sass';
 
 import { animated, useTransition } from '@react-spring/web';
-import { addReadDialog, setTyping } from '../../../redux/dialogsReducer';
-import { setGameMode } from '../../../redux/gameReducer';
 import { GAME_MODES, SPEAKER_ROLES } from '../../../gameCore/constants';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { useGameStore } from '../../../stores/gameStore';
+import { useDialogsStore } from '../../../stores/dialogsStore';
 import DialogBox from './DialogBox';
 
 interface AnimatedBoxProps {
@@ -13,17 +12,19 @@ interface AnimatedBoxProps {
 }
 
 const Dialog = () => {
-    // REDUX CONNECT
-    const dialogs = useAppSelector(state => state.dialogs);
-    const currDialogData = useAppSelector(state => state.dialogs.dialogList[dialogs.currentDialogId]);
-    const dispatch = useAppDispatch();
+    const currentDialogId = useDialogsStore(state => state.currentDialogId);
+    const currDialogData = useDialogsStore(state => state.dialogList[state.currentDialogId]);
+    const speakersData = useDialogsStore(state => state.speakersData);
+    const typing = useDialogsStore(state => state.typing);
 
-    const phrasesCount = currDialogData.phrases.length;
-    const typing = dialogs.typing;
+    const phrasesCount = currDialogData?.phrases.length ?? 0;
 
     const getBoxes = useMemo(() => {
+      if (!currDialogData) {
+          return [];
+      }
       return currDialogData.phrases.map((p) => {
-        const speakerData = dialogs.speakersData.find(char => char.name === p.speaker);
+        const speakerData = speakersData.find(char => char.name === p.speaker);
         const boxRole = speakerData?.role === SPEAKER_ROLES.HERO ? classes.hero : classes.enemy;
         const spriteSrc = speakerData?.sprite ?? '';
         return (
@@ -39,21 +40,21 @@ const Dialog = () => {
           )
         );
       });
-    }, [currDialogData])
+    }, [currDialogData, speakersData])
 
     const [index, setIndex] = useState(0);
 
     const handleEnterKeydown = useCallback((e: KeyboardEvent) => {
         if (e.key === 'Enter' && !typing) {
             if (index < phrasesCount - 1) {
-                dispatch(setTyping(true));
+                useDialogsStore.getState().setTyping(true);
                 setIndex(index + 1);
             } else {
-                dispatch(setGameMode(GAME_MODES.EXPLORING));
-                dispatch(addReadDialog(dialogs.currentDialogId));
+                useGameStore.getState().setGameMode(GAME_MODES.EXPLORING);
+                useDialogsStore.getState().addReadDialog(currentDialogId);
             }
         }
-    }, [dialogs.currentDialogId, dispatch, typing, index, phrasesCount]);
+    }, [currentDialogId, typing, index, phrasesCount]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleEnterKeydown);
@@ -73,7 +74,7 @@ const Dialog = () => {
         <div className = {classes.dialogBoxWrapper}>
             {transitions((style, item) => {
                     const D = getBoxes[item];
-                    return <D style = {style as unknown as React.CSSProperties} />;
+                    return D ? <D style = {style as unknown as React.CSSProperties} /> : null;
                 }
             )}
         </div >

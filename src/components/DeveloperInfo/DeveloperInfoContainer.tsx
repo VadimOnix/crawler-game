@@ -1,36 +1,17 @@
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import type { ConnectedProps } from 'react-redux';
+import { useEffect } from 'react';
 import DeveloperInfo from './DeveloperInfo';
-import { changeBackgroundImage } from '../../redux/commonAppReducer';
-import type { RootState } from '../../redux/Store';
+import { useCommonAppStore } from '../../stores/commonAppStore';
 
 import bgImage from '../../assets/img/MenuBackground.jpeg'
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        backgroundImageUrl : state.commonApp.backgroundImageUrl
-    };
+const DeveloperInfoContainer = () => {
+    useEffect(() => {
+        useCommonAppStore.getState().changeBackgroundImage(bgImage);
+    }, []);
+
+    return (
+        <DeveloperInfo/>
+    );
 };
 
-const mapDispatchToProps = {
-    changeBackgroundImage
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type DeveloperInfoContainerProps = ConnectedProps<typeof connector>;
-
-class DeveloperInfoContainer extends Component<DeveloperInfoContainerProps> {
-    componentDidMount() {
-        this.props.changeBackgroundImage(bgImage)
-    }
-
-    render() {
-        return (
-            <DeveloperInfo/>
-        );
-    }
-}
-
-export default connector(DeveloperInfoContainer);
+export default DeveloperInfoContainer;
