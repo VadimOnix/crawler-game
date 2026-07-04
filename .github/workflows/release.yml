@@ -3,6 +3,12 @@ name: Release
 on:
     push:
         tags: ['v*']
+    # ручной запуск из вкладки Actions: сам создаёт тег и публикует релиз
+    workflow_dispatch:
+        inputs:
+            version:
+                description: 'Версия релиза без префикса v (например, 0.2.0)'
+                required: true
 
 permissions:
     contents: write
@@ -12,9 +18,17 @@ jobs:
         name: Build & Publish Release
         runs-on: ubuntu-latest
         timeout-minutes: 15
+        env:
+            RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && format('v{0}', inputs.version) || github.ref_name }}
         steps:
             - name: Checkout
               uses: actions/checkout@v7
+
+            - name: Create tag (manual run)
+              if: github.event_name == 'workflow_dispatch'
+              run: |
+                  git tag "$RELEASE_TAG"
+                  git push origin "$RELEASE_TAG"
 
             - name: Setup Node.js
               uses: actions/setup-node@v6
@@ -37,10 +51,11 @@ jobs:
             - name: Archive build
               run: |
                   cd dist
-                  zip -r ../crawler-game-${{ github.ref_name }}.zip .
+                  zip -r "../crawler-game-$RELEASE_TAG.zip" .
 
             - name: Create GitHub Release
               uses: softprops/action-gh-release@v3
               with:
+                  tag_name: ${{ env.RELEASE_TAG }}
                   generate_release_notes: true
-                  files: crawler-game-${{ github.ref_name }}.zip
+                  files: crawler-game-${{ env.RELEASE_TAG }}.zip
