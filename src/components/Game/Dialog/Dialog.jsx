@@ -1,9 +1,9 @@
 import React, { useMemo, useCallback, useEffect, useState } from 'react';
 import classes from './Dialog.module.sass';
 
-import { batch, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { animated, useTransition } from 'react-spring';
+import { animated, useTransition } from '@react-spring/web';
 import { addReadDialog, setTyping } from '../../../redux/dialogsReducer';
 import { setGameMode } from '../../../redux/gameReducer';
 import DialogBox from './DialogBox';
@@ -53,16 +53,13 @@ const Dialog = () => {
                 dispatch(setTyping(true));
                 setIndex(index + 1);
             } else {
-                batch(() => {
-                        dispatch(setGameMode('exploring'));
-                        dispatch(addReadDialog(dialogs.currentDialogId));
-                    }
-                );
+                dispatch(setGameMode('exploring'));
+                dispatch(addReadDialog(dialogs.currentDialogId));
             }
         }
     }, [dialogs.currentDialogId, dispatch, typing, index, phrasesCount]);
 
-    const transitions = useTransition(index, p => p, {
+    const transitions = useTransition(index, {
         from: {opacity: 0, transform: 'translateY(100%)'},
         enter: {opacity: 1, transform: 'translateY(0)'},
         leave: {opacity: 0, transform: 'translateY(-50%)'},
@@ -70,11 +67,11 @@ const Dialog = () => {
 
     return (
         <div className = {classes.dialogBoxWrapper}>
-            {transitions.map(({item, props, key}) => {
+            {transitions((style, item) => {
                     const boxes = getBoxes;
 
                     const D = boxes[item];
-                    return <D key = {key} style = {props} />;
+                    return <D style = {style} />;
                 }
             )}
         </div >

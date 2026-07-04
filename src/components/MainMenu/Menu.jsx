@@ -5,8 +5,8 @@ import { NavLink } from 'react-router-dom';
 
 const Menu = (props) => {
     let optionsList = props.menuOptions.map((o,index) => (
-        <NavLink activeClassName = {classes.menuItem} to = {o.link}>
-            <Button key = {index} text = {o.label} />
+        <NavLink key = {index} className = {({isActive}) => isActive ? classes.menuItem : undefined} to = {o.link}>
+            <Button text = {o.label} />
         </NavLink >
     ));
 

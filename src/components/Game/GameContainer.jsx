@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { batch, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import Game from './Game';
 import { loadLevel, setGameMode, setGameObjects } from '../../redux/gameReducer';
 import { checkOnGameEvent, getUpdatedGameObjects } from '../../gameCore/controller';
@@ -31,10 +31,8 @@ class GameContainer extends Component {
     componentDidMount() {
 
         // load firs level
-        batch(() => {
-            this.props.loadLevel(LEVELS[1]);
-            this.props.loadDialogs(LEVELS[1].dialogs);
-        });
+        this.props.loadLevel(LEVELS[1]);
+        this.props.loadDialogs(LEVELS[1].dialogs);
         // bad solution for architecture
         window.addEventListener('keydown', this.handleKeydown);
     }
@@ -67,16 +65,14 @@ class GameContainer extends Component {
             );
 
             let event = checkOnGameEvent(updatedGameObjects.newGameObjects);
-            batch(() => {
-                if (event.isGameEvent) {
-                    if (event.eventObject.type === 'dialog' &&
-                        !this.props.alreadyReadIndexes.includes(event.eventObject.dialogId)) {
-                        this.props.setGameMode('speaking');
-                        this.props.setCurrentDialog(event.eventObject.dialogId);
-                    }
+            if (event.isGameEvent) {
+                if (event.eventObject.type === 'dialog' &&
+                    !this.props.alreadyReadIndexes.includes(event.eventObject.dialogId)) {
+                    this.props.setGameMode('speaking');
+                    this.props.setCurrentDialog(event.eventObject.dialogId);
                 }
-                this.props.setGameObjects(updatedGameObjects.newGameObjects);
-            });
+            }
+            this.props.setGameObjects(updatedGameObjects.newGameObjects);
     }
 
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MenuContainer from './components/MainMenu/MenuContainer';
 import GameContainer from './components/Game/GameContainer';
 import PlayerInfoContainer from './components/PlayerInfo/PlayerInfoContainer';
@@ -14,12 +14,12 @@ const App = props => {
 
     let content = props.isLoading
         ? <Preloader />
-        : (<>
-            <Route exact path = "/" render = {() => <MenuContainer />} />
-            <Route path = "/game" render = {() => <GameContainer />} />
-            <Route path = "/character" render = {() => <PlayerInfoContainer />} />
-            <Route path = "/about" render = {() => <DeveloperInfoContainer />} />
-        </>);
+        : (<Routes >
+            <Route path = "/" element = {<MenuContainer />} />
+            <Route path = "/game" element = {<GameContainer />} />
+            <Route path = "/character" element = {<PlayerInfoContainer />} />
+            <Route path = "/about" element = {<DeveloperInfoContainer />} />
+        </Routes >);
 
     return (
         <BrowserRouter >
