@@ -1,11 +1,11 @@
-// отображать текущую карту
+// Состояние боя (шаблон, боевая система в разработке)
 let initialState = {};
 
-const mapReducer = (state = initialState, action) => {
-    switch (action) {
+const battleReducer = (state = initialState, action) => {
+    switch (action.type) {
         default:
             return state;
     }
 };
 
-export default mapReducer;
+export default battleReducer;

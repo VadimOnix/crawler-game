@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { animated, useTransition } from '@react-spring/web';
 import { addReadDialog, setTyping } from '../../../redux/dialogsReducer';
 import { setGameMode } from '../../../redux/gameReducer';
+import { GAME_MODES, SPEAKER_ROLES } from '../../../gameCore/constants';
 import DialogBox from './DialogBox';
 
 
@@ -15,21 +16,14 @@ const Dialog = () => {
     const currDialogData = useSelector(state => state.dialogs.dialogList[dialogs.currentDialogId]);
     const dispatch = useDispatch();
 
-    useEffect(() => {
-      window.addEventListener('keydown', handleEnterKeydown);
-
-      return () => {
-          window.removeEventListener('keydown', handleEnterKeydown);
-      };
-  });
-
     const phrasesCount = currDialogData.phrases.length;
     const typing = dialogs.typing;
 
     const getBoxes = useMemo(() => {
       return currDialogData.phrases.map((p) => {
-        let boxRole = p.speaker === 'hero' ? classes.hero : classes.enemy;
-        let spriteSrc = dialogs.speakersData.find(char => char.name === p.speaker).sprite;
+        let speakerData = dialogs.speakersData.find(char => char.name === p.speaker);
+        let boxRole = speakerData.role === SPEAKER_ROLES.HERO ? classes.hero : classes.enemy;
+        let spriteSrc = speakerData.sprite;
         return (
           ({ style }) => (
             <animated.div style={{ ...style, position: 'absolute' }}>
@@ -48,16 +42,24 @@ const Dialog = () => {
     let [index, setIndex] = useState(0);
 
     const handleEnterKeydown = useCallback((e) => {
-        if (e.keyCode === 13 && !typing) {
+        if (e.key === 'Enter' && !typing) {
             if (index < phrasesCount - 1) {
                 dispatch(setTyping(true));
                 setIndex(index + 1);
             } else {
-                dispatch(setGameMode('exploring'));
+                dispatch(setGameMode(GAME_MODES.EXPLORING));
                 dispatch(addReadDialog(dialogs.currentDialogId));
             }
         }
     }, [dialogs.currentDialogId, dispatch, typing, index, phrasesCount]);
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleEnterKeydown);
+
+        return () => {
+            window.removeEventListener('keydown', handleEnterKeydown);
+        };
+    }, [handleEnterKeydown]);
 
     const transitions = useTransition(index, {
         from: {opacity: 0, transform: 'translateY(100%)'},

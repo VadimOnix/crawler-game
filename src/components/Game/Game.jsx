@@ -4,17 +4,15 @@ import WorldMapContainer from './WorldMap/WorldMapContainer';
 import classes from './Game.module.sass';
 import Dialog from './Dialog/Dialog';
 import Battle from '../Battle/Battle';
+import { GAME_MODES } from '../../gameCore/constants';
 
 const Game = (props) => {
-
-    let dialog = props.gameMode === 'speaking' ? <Dialog/> : null;
-
     return (
         <div className = {classes.gameContainer}>
-            <Battle/>
-            {/*<WorldMapContainer />*/}
-            {/*<GameObjectsContainer />*/}
-            {dialog}
+            <WorldMapContainer />
+            <GameObjectsContainer />
+            {props.gameMode === GAME_MODES.SPEAKING && <Dialog />}
+            {props.gameMode === GAME_MODES.BATTLE && <Battle />}
         </div >
     );
 };

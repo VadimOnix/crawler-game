@@ -1,32 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import WorldMap from './WorldMap';
-import { setMapAssets, setLevelMap } from '../../../redux/worldMapReducer';
 import LEVELS from '../../../gameCore/levels/LEVELS';
 import CONSTANTS from '../../../gameCore/constants';
 
-function mapStateToProps(state) {
-    return {
-        level: state.game.level,
-        mapLevel: state.worldMap.mapLevel,
-        mapAssets: state.worldMap.mapAssets,
-    };
-}
+// Статичные данные уровня (карта, тайлы) не дублируются в сторе:
+// единственный источник правды — LEVELS, стор хранит только номер уровня.
+const WorldMapContainer = () => {
+    const level = useSelector(state => state.game.level);
+    const {levelMap, levelAssets} = LEVELS[level];
 
-let mapDispatchToProps = {
-    setLevelMap, setMapAssets
+    return <WorldMap mapLevel = {levelMap} mapAssets = {levelAssets} constants = {CONSTANTS} />;
 };
 
-
-class WorldMapContainer extends Component {
-    componentDidMount() {
-        this.props.setLevelMap(LEVELS[this.props.level].levelMap);
-        this.props.setMapAssets(LEVELS[this.props.level].levelAssets);
-    }
-
-    render() {
-        return <WorldMap mapLevel = {this.props.mapLevel} mapAssets = {this.props.mapAssets} constants = {CONSTANTS} />;
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(WorldMapContainer);
+export default WorldMapContainer;
