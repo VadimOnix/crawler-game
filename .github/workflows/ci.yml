@@ -5,16 +5,25 @@ on:
         branches: [master]
     pull_request:
 
+permissions:
+    contents: read
+
+# не гоняем устаревшие прогоны: новый пуш в ту же ветку отменяет предыдущий
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
     check:
         name: Lint, Test & Build
         runs-on: ubuntu-latest
+        timeout-minutes: 10
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             - name: Setup Node.js
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v6
               with:
                   node-version-file: .nvmrc
                   cache: npm
