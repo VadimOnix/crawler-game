@@ -1,7 +1,36 @@
 .preloaderContainer
   display: flex
+  flex-direction: column
+  gap: 32px
   justify-content: center
   align-items: center
   height: 100vh
   width: 100vw
-  background-color: #21293f
+  background: radial-gradient(circle at 50% 42%, #0b1226 0%, #05060e 72%)
+
+  img
+    filter: drop-shadow(0 0 18px rgba(240, 45, 255, .45))
+
+.loadingText
+  margin: 0
+  font-family: var(--font-mono)
+  font-size: .85rem
+  letter-spacing: .4em
+  text-transform: uppercase
+  color: #7df9ff
+  text-shadow: 0 0 10px rgba(0, 240, 255, .6)
+
+  // бегущие точки: content анимируется дискретными шагами
+  &::after
+    content: ''
+    animation: dots 1.2s steps(1, jump-none) infinite
+
+@keyframes dots
+  0%
+    content: ''
+  25%
+    content: '.'
+  50%
+    content: '..'
+  75%
+    content: '...'

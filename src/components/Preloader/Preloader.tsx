@@ -16,6 +16,7 @@ const Preloader = () => {
     return (
         <animated.div className = {classes.preloaderContainer} style = {containerStyle}>
             <animated.img src = {preloaderSvg} style = {imageStyle} alt = "Game is loading" />
+            <animated.p className = {classes.loadingText} style = {imageStyle}>Loading</animated.p >
         </animated.div >
     );
 };

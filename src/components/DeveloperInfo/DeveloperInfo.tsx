@@ -13,9 +13,9 @@ const DeveloperInfo = () => {
                         <h1 >Vadim Xces</h1 >
                         <p >Немного текста обо мне</p >
                     </div >
-                    <div>
+                    <div className = {classes.socials}>
                         <p>
-                            оциалочки
+                            Социалочки
                         </p>
                     </div>
                 </div >

@@ -1,75 +1,112 @@
 .dialogBoxWrapper
   position: absolute
   z-index: 999
-
-  transform: translate(150px, 400px)
-
+  // якорь по центру нижней части поля: (800 - 560) / 2 = 120
+  transform: translate(120px, 610px)
 
 .dialogBox
   position: relative
-  width: 500px
-  height: 150px
+  width: 560px
+  min-height: 160px
+  box-sizing: border-box
   display: grid
-  grid-column-gap: 20px
-  grid-template-rows: 1fr 5fr
-  grid-template-columns: 1fr 3fr
+  grid-column-gap: 18px
+  grid-row-gap: 4px
+  grid-template-rows: auto 1fr
+  padding: 16px 18px 22px
 
-  background: linear-gradient(18deg, rgba(54, 62, 99, 1) 0%, rgba(15, 30, 73, 1) 100%)
-  border: 3px solid white
-  border-radius: 5px
+  background: linear-gradient(165deg, rgba(14, 20, 42, .92) 0%, rgba(5, 8, 20, .96) 100%)
+  backdrop-filter: blur(6px)
+  border: 1px solid var(--accent)
+  border-radius: 10px
+  box-shadow: 0 0 24px var(--glow), inset 0 0 50px rgba(0, 0, 0, .5)
 
+  // неоновая линия-акцент по верхней кромке
+  &::before
+    content: ''
+    position: absolute
+    top: -1px
+    left: 24px
+    right: 24px
+    height: 2px
+    background: linear-gradient(90deg, transparent, var(--accent), transparent)
+
+// цветовые роли говорящих задаются через custom properties
 .hero
-  grid-template-areas: 'a h h' 'a t t'
-
-  .avatar
-    margin-left: 20px
-    justify-self: start
-
-  .text
-    padding-right: 20px
-
+  --accent: rgba(0, 240, 255, .55)
+  --title-color: #7df9ff
+  --glow: rgba(0, 240, 255, .2)
+  grid-template-areas: 'a h' 'a t'
+  grid-template-columns: 118px 1fr
 
 .enemy
-  grid-template-areas: 'h h a' 't t a'
-
-  .avatar
-    margin-right: 20px
-    justify-self: end
-
-  .text
-    padding-left: 20px
+  --accent: rgba(255, 45, 149, .55)
+  --title-color: #ff7ac1
+  --glow: rgba(255, 45, 149, .22)
+  grid-template-areas: 'h a' 't a'
+  grid-template-columns: 1fr 118px
 
 .avatar
   grid-area: a
+  width: 118px
+  height: 118px
+  object-fit: cover
+  border-radius: 8px
+  border: 1px solid var(--accent)
+  box-shadow: 0 0 14px var(--glow)
+  align-self: center
 
 .text
   grid-area: t
-  color: white
+  color: var(--cyber-text)
   width: 100%
-  font-family: Consolas, monospace
-  text-indent: 1.5em
+  font-family: var(--font-mono)
+  font-size: .95rem
+  line-height: 1.5
   word-wrap: break-word
   justify-self: start
 
   p
     margin-block-start: 0
+    margin-block-end: 0
 
 .title
   grid-area: h
-  color: white
+  margin: 0
+  color: var(--title-color)
   width: 100%
-  font-family: Consolas, monospace
-  text-indent: 1.5em
-  margin-block-end: 0.3em
+  font-family: var(--font-mono)
+  font-size: 1rem
+  letter-spacing: .14em
+  text-transform: uppercase
+  text-shadow: 0 0 10px var(--glow)
 
 .cursor
-  color: white
-  background-color: white
+  color: var(--title-color)
+  animation: blink .9s steps(1, jump-none) infinite
 
 .nextPopup
-  right: 10px
-  bottom: 5px
-  font-size: 0.6rem
+  right: 12px
+  bottom: 10px
+  font-size: 0.62rem
+  padding: 3px 9px
+  border: 1px solid rgba(255, 255, 255, .22)
+  border-radius: 4px
+  animation: hintPulse 2.2s ease-in-out infinite
 
   span
-    color: white
+    color: rgba(255, 255, 255, .6)
+    letter-spacing: .08em
+    text-transform: uppercase
+
+@keyframes blink
+  0%, 100%
+    opacity: 1
+  50%
+    opacity: 0
+
+@keyframes hintPulse
+  0%, 100%
+    border-color: rgba(255, 255, 255, .22)
+  50%
+    border-color: var(--accent)

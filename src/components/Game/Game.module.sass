@@ -2,3 +2,12 @@
   height: 800px
   width: 800px
   position: relative
+
+// HUD-рамка поверх поля: неоновые уголки-скобки, клики пропускает
+.hudFrame
+  position: absolute
+  inset: -14px
+  pointer-events: none
+  z-index: 500
+  filter: drop-shadow(0 0 6px rgba(0, 240, 255, .6))
+  background: linear-gradient(var(--cyber-cyan), var(--cyber-cyan)) top left / 30px 2px no-repeat, linear-gradient(var(--cyber-cyan), var(--cyber-cyan)) top left / 2px 30px no-repeat, linear-gradient(var(--cyber-cyan), var(--cyber-cyan)) top right / 30px 2px no-repeat, linear-gradient(var(--cyber-cyan), var(--cyber-cyan)) top right / 2px 30px no-repeat, linear-gradient(var(--cyber-cyan), var(--cyber-cyan)) bottom left / 30px 2px no-repeat, linear-gradient(var(--cyber-cyan), var(--cyber-cyan)) bottom left / 2px 30px no-repeat, linear-gradient(var(--cyber-cyan), var(--cyber-cyan)) bottom right / 30px 2px no-repeat, linear-gradient(var(--cyber-cyan), var(--cyber-cyan)) bottom right / 2px 30px no-repeat

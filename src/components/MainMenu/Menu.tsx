@@ -16,6 +16,7 @@ const Menu = (props: MenuProps) => {
 
     return (
         <div className = {classes.menuBackground}>
+            <h1 className = {classes.title} data-text = "Crawler">Crawler</h1 >
             <div className = {classes.menuContainer}>
                 {optionsList}
             </div >

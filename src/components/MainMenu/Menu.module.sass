@@ -1,20 +1,71 @@
 .menuBackground
     height: 100vh
     display: flex
+    flex-direction: column
     justify-content: center
     align-items: center
+    gap: 8vh
+
+.title
+    position: relative
+    margin: 0
+    font-family: var(--font-display)
+    font-weight: 400
+    font-size: clamp(3rem, 9vw, 5.5rem)
+    letter-spacing: 0.18em
+    text-transform: uppercase
+    color: #eaf6ff
+    text-shadow: 0 0 8px rgba(0, 240, 255, .8), 0 0 24px rgba(0, 240, 255, .45), 0 0 72px rgba(0, 240, 255, .25)
+    animation: flicker 5s linear infinite
+
+    // глитч-слои: хроматические копии заголовка из data-text
+    &::before, &::after
+        content: attr(data-text)
+        position: absolute
+        inset: 0
+        text-shadow: none
+        opacity: 0
+
+    &::before
+        color: var(--cyber-magenta)
+        clip-path: inset(15% 0 55% 0)
+        animation: glitch 3.1s steps(1, jump-none) infinite
+
+    &::after
+        color: var(--cyber-cyan)
+        clip-path: inset(60% 0 10% 0)
+        animation: glitch 2.3s steps(1, jump-none) infinite reverse
 
 .menuContainer
     display: flex
     flex-direction: column
     justify-content: space-around
-    min-height: 400px
-    height: 200px
+    min-height: 320px
 
     @media screen and (min-width: 720px)
-        transform: scale(1.5)
+        transform: scale(1.25)
 
 .menuItem
     text-decoration: none
     &:visited
         text-decoration: none
+
+@keyframes flicker
+    0%, 87%, 91%, 100%
+        opacity: 1
+    88%, 90%
+        opacity: .55
+
+@keyframes glitch
+    0%, 89%, 100%
+        opacity: 0
+        transform: translate(0, 0)
+    90%
+        opacity: .8
+        transform: translate(-4px, 2px)
+    93%
+        opacity: .8
+        transform: translate(4px, -2px)
+    96%
+        opacity: .6
+        transform: translate(-2px, 0)
