@@ -4,6 +4,16 @@
   // якорь по центру нижней части поля: (800 - 560) / 2 = 120
   transform: translate(120px, 610px)
 
+  // на маленьких экранах поле скроллится за героем, поэтому диалог
+  // крепится к низу экрана, а не к координатам поля
+  @media (max-width: 900px), (max-height: 900px)
+    position: fixed
+    left: 50%
+    bottom: max(10px, env(safe-area-inset-bottom))
+    transform: translateX(-50%)
+    width: min(560px, calc(100vw - 16px))
+    height: 215px
+
 .dialogBox
   position: relative
   width: 560px
@@ -31,6 +41,12 @@
     height: 2px
     background: linear-gradient(90deg, transparent, var(--accent), transparent)
 
+  @media (max-width: 900px), (max-height: 900px)
+    width: 100%
+    min-height: 150px
+    grid-column-gap: 12px
+    padding: 12px 12px 20px
+
 // цветовые роли говорящих задаются через custom properties
 .hero
   --accent: rgba(0, 240, 255, .55)
@@ -39,12 +55,18 @@
   grid-template-areas: 'a h' 'a t'
   grid-template-columns: 118px 1fr
 
+  @media (max-width: 900px), (max-height: 900px)
+    grid-template-columns: 84px 1fr
+
 .enemy
   --accent: rgba(255, 45, 149, .55)
   --title-color: #ff7ac1
   --glow: rgba(255, 45, 149, .22)
   grid-template-areas: 'h a' 't a'
   grid-template-columns: 1fr 118px
+
+  @media (max-width: 900px), (max-height: 900px)
+    grid-template-columns: 1fr 84px
 
 .avatar
   grid-area: a
@@ -56,6 +78,11 @@
   box-shadow: 0 0 14px var(--glow)
   align-self: center
 
+  @media (max-width: 900px), (max-height: 900px)
+    width: 84px
+    height: 84px
+    align-self: start
+
 .text
   grid-area: t
   color: var(--cyber-text)
@@ -65,6 +92,10 @@
   line-height: 1.5
   word-wrap: break-word
   justify-self: start
+
+  @media (max-width: 900px), (max-height: 900px)
+    font-size: .85rem
+    line-height: 1.4
 
   p
     margin-block-start: 0

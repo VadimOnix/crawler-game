@@ -42,19 +42,27 @@ const Dialog = () => {
 
     const [index, setIndex] = useState(0);
 
+    // следующая фраза или закрытие диалога; вызывается и по Enter, и по тапу
+    const advanceDialog = useCallback(() => {
+        if (typing) {
+            return;
+        }
+        if (index < phrasesCount - 1) {
+            useDialogsStore.getState().setTyping(true);
+            setIndex(index + 1);
+        } else {
+            useGameStore.getState().setGameMode(GAME_MODES.EXPLORING);
+            useDialogsStore.getState().addReadDialog(currentDialogId);
+        }
+    }, [currentDialogId, typing, index, phrasesCount]);
+
     const handleEnterKeydown = useCallback(
         (e: KeyboardEvent) => {
-            if (e.key === 'Enter' && !typing) {
-                if (index < phrasesCount - 1) {
-                    useDialogsStore.getState().setTyping(true);
-                    setIndex(index + 1);
-                } else {
-                    useGameStore.getState().setGameMode(GAME_MODES.EXPLORING);
-                    useDialogsStore.getState().addReadDialog(currentDialogId);
-                }
+            if (e.key === 'Enter') {
+                advanceDialog();
             }
         },
-        [currentDialogId, typing, index, phrasesCount],
+        [advanceDialog],
     );
 
     useEffect(() => {
@@ -72,7 +80,7 @@ const Dialog = () => {
     });
 
     return (
-        <div className={classes.dialogBoxWrapper}>
+        <div className={classes.dialogBoxWrapper} onClick={advanceDialog}>
             {transitions((style, item) => {
                 const D = getBoxes[item];
                 return D ? <D style={style as unknown as React.CSSProperties} /> : null;

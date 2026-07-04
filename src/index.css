@@ -17,6 +17,8 @@ body {
         'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     margin: 0;
     background-color: var(--cyber-bg);
+    /* мобильные браузеры: без pull-to-refresh и «отскока» при жестах в игре */
+    overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
