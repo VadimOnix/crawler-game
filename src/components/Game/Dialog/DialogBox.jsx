@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useEffect } from 'react';
 import classes from './Dialog.module.sass';
-import Typing from 'react-typing-animation';
-import { Spring } from 'react-spring/renderprops-universal';
+import TypingText from './TypingText';
+import { animated, useSpring } from '@react-spring/web';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTyping } from '../../../redux/dialogsReducer';
 
@@ -26,17 +26,13 @@ const DialogBox = (props) => {
 
   const getTypingContent = useMemo(() => {
     return typing ?
-      <Typing className={classes.text}
+      <TypingText className={classes.text}
         cursorClassName={classes.cursor}
         speed={3}
-        startDelay={600}
+        startDelay={700}
+        text={props.text}
         onFinishedTyping={() => { dispatch(setTyping(false)) }}
-      >
-        <Typing.Delay ms={100} />
-        <p >
-          {props.text}
-        </p >
-      </Typing >
+      />
       :
       <div className={classes.text}>
         <p >
@@ -45,19 +41,20 @@ const DialogBox = (props) => {
       </div>
   }, [typing]);
 
+    const nextPopupStyle = useSpring({
+        from: {opacity: 0},
+        to: {opacity: 1},
+        delay: 1300,
+    });
+
     return (
         <div className = {[classes.dialogBox, props.boxRole].join(' ')}>
             <img className = {classes.avatar} src = {props.spriteSrc} alt = "" />
             <h3 className = {classes.title}>{props.speaker}</h3 >
                 {getTypingContent}
-            <Spring
-                delay = {1300}
-                from = {{position: 'absolute', opacity: 0}}
-                to = {{opacity: 1}}
-            >
-                {props => <div style = {props} className = {classes.nextPopup}><span >пропустить (Enter) </span >
-                </div >}
-            </Spring >
+            <animated.div style = {{position: 'absolute', ...nextPopupStyle}} className = {classes.nextPopup}>
+                <span >пропустить (Enter) </span >
+            </animated.div >
         </div >
     );
 };

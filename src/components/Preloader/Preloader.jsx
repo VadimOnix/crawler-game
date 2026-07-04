@@ -1,30 +1,23 @@
 import React from 'react';
 import preloaderSvg from '../../assets/img/Preloader.svg';
 import classes from './Preloader.module.sass';
-import { Spring, config } from 'react-spring/renderprops';
+import { animated, useSpring } from '@react-spring/web';
 
-const Preloader = (props) => {
+const Preloader = () => {
+    const containerStyle = useSpring({
+        from: {opacity: 0},
+        to: {opacity: 1},
+    });
+    const imageStyle = useSpring({
+        from: {opacity: 0},
+        to: {opacity: 1},
+        delay: 1000,
+    });
+
     return (
-        <Spring
-            from = {{opacity: 0}}
-            to = {{opacity: 1}}
-        >
-            {props =>
-                <div className = {classes.preloaderContainer} style={props}>
-                    <Spring
-                        from = {{opacity: 0}}
-                        to = {{opacity: 1}}
-                        config={{
-                            delay: 1000
-                        }}
-                    >
-                        {props =>
-                            <img src = {preloaderSvg} style={props} alt = "Game is loading" />
-                        }
-                    </Spring>
-                </div >
-            }
-        </Spring >
+        <animated.div className = {classes.preloaderContainer} style = {containerStyle}>
+            <animated.img src = {preloaderSvg} style = {imageStyle} alt = "Game is loading" />
+        </animated.div >
     );
 };
 
