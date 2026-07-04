@@ -1,43 +1,27 @@
-import { Component } from 'react';
-import { connect } from 'react-redux';
-import type { ConnectedProps } from 'react-redux';
-import { changeBackgroundImage, switchPreloader } from './redux/commonAppReducer';
-import type { RootState } from './redux/Store';
+import { useEffect } from 'react';
+import { useCommonAppStore } from './stores/commonAppStore';
 import App from './App';
 
 import bgImageBlured from './assets/img/MenuBackground_blured.jpeg';
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        isLoading: state.commonApp.isLoading,
-        backgroundImageUrl: state.commonApp.backgroundImageUrl,
-    };
-};
+const AppContainer = () => {
+    const isLoading = useCommonAppStore(state => state.isLoading);
+    const backgroundImageUrl = useCommonAppStore(state => state.backgroundImageUrl);
 
-const mapDispatchToProps = {
-    switchPreloader,
-    changeBackgroundImage,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type AppContainerProps = ConnectedProps<typeof connector>;
-
-class AppContainer extends Component<AppContainerProps> {
-    componentDidMount() {
-        this.props.changeBackgroundImage(bgImageBlured);
-        this.props.switchPreloader(true);
-        setTimeout(
+    useEffect(() => {
+        const {changeBackgroundImage, switchPreloader} = useCommonAppStore.getState();
+        changeBackgroundImage(bgImageBlured);
+        switchPreloader(true);
+        const timeoutId = setTimeout(
             () => {
-                this.props.switchPreloader(false);
+                switchPreloader(false);
             }
             , 2000
         );
-    }
+        return () => clearTimeout(timeoutId);
+    }, []);
 
-    render() {
-        return (<App {...this.props} />);
-    }
-}
+    return <App isLoading = {isLoading} backgroundImageUrl = {backgroundImageUrl} />;
+};
 
-export default connector(AppContainer);
+export default AppContainer;

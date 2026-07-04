@@ -1,7 +1,7 @@
 import classes from './Menu.module.sass';
 import Button from './Button/Button';
 import { NavLink } from 'react-router-dom';
-import type { MenuOption } from '../../redux/commonAppReducer';
+import type { MenuOption } from '../../stores/commonAppStore';
 
 interface MenuProps {
     menuOptions: MenuOption[];

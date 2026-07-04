@@ -2,8 +2,7 @@ import { useMemo, useCallback, useEffect } from 'react';
 import classes from './Dialog.module.sass';
 import TypingText from './TypingText';
 import { animated, useSpring } from '@react-spring/web';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { setTyping } from '../../../redux/dialogsReducer';
+import { useDialogsStore } from '../../../stores/dialogsStore';
 
 interface DialogBoxProps {
     boxRole: string;
@@ -14,14 +13,13 @@ interface DialogBoxProps {
 
 const DialogBox = (props: DialogBoxProps) => {
 
-    const typing = useAppSelector(state => state.dialogs.typing);
-    const dispatch = useAppDispatch();
+    const typing = useDialogsStore(state => state.typing);
 
     const handleEnterKeydown = useCallback((e: KeyboardEvent) => {
         if (e.key === 'Enter' && typing) {
-            dispatch(setTyping(false));
+            useDialogsStore.getState().setTyping(false);
         }
-    },[typing, dispatch]);
+    },[typing]);
 
 
     useEffect(() => {
@@ -38,7 +36,7 @@ const DialogBox = (props: DialogBoxProps) => {
         speed={3}
         startDelay={700}
         text={props.text}
-        onFinishedTyping={() => { dispatch(setTyping(false)) }}
+        onFinishedTyping={() => { useDialogsStore.getState().setTyping(false) }}
       />
       :
       <div className={classes.text}>
