@@ -1,3 +1,5 @@
+import { SPEAKER_ROLES } from '../gameCore/constants';
+
 const ADD_READ_DIALOG = 'ADD-READ-DIALOG';
 const DELETE_DIALOG = 'DELETE-DIALOG';
 const LOAD_DIALOGS = 'LOAD-DIALOGS';
@@ -12,10 +14,12 @@ let initialState = {
     speakersData: [
         {
             name: 'hero',
+            role: SPEAKER_ROLES.HERO,
             sprite: ''
         },
         {
             name: 'enemy',
+            role: SPEAKER_ROLES.ENEMY,
             sprite: 'enemy_avatar'
         }
     ],

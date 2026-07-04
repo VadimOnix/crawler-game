@@ -11,10 +11,10 @@ const DialogBox = (props) => {
     const dispatch = useDispatch();
 
     const handleEnterKeydown = useCallback((e) => {
-        if (e.keyCode === 13 && typing) {
+        if (e.key === 'Enter' && typing) {
             dispatch(setTyping(false));
         }
-    },[typing]);
+    },[typing, dispatch]);
 
 
     useEffect(() => {
@@ -22,7 +22,7 @@ const DialogBox = (props) => {
         return () => {
             window.removeEventListener('keydown', handleEnterKeydown);
         };
-    },[]);
+    },[handleEnterKeydown]);
 
   const getTypingContent = useMemo(() => {
     return typing ?

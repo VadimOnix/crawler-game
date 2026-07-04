@@ -1,5 +1,4 @@
-// карта, если эксплоринг
-// битва, если битва
+import { GAME_MODES } from '../gameCore/constants';
 
 const LOAD_LEVEL = 'LOAD-LEVEL';
 const SET_GAME_OBJECTS = 'SET-GAME-OBJECTS';
@@ -9,62 +8,9 @@ const SET_GAME_MODE = 'SET-GAME-MODE';
 
 let initialState = {
     level: 1,
-    gameMode: 'exploring',
-    gameObjects: [
-        {
-            id: 1,
-            type: 'hero',
-            coords: {
-                x: 0,
-                y: 0
-            },
-            sprite: '',
-            spritePosition: [0, 0],
-            walkIndex: 0,
-            prevDirection: 'S',
-            currentDirection: 'S'
-        },
-        {
-            id: 2,
-            type: 'treasure_chest',
-            coords: {
-                x: 5,
-                y: 5
-            },
-            sprite: '',
-            spritePosition: [0, 0],
-            walkIndex: 0,
-            prevDirection: 'S',
-            currentDirection: 'S'
-        },
-        {
-            id: 3,
-            type: 'monster',
-            coords: {
-                x: 10,
-                y: 10
-            },
-            sprite: '',
-            spritePosition: [0, 0],
-            walkIndex: 0,
-            prevDirection: 'S',
-            currentDirection: 'S'
-        },
-        {
-            id: 4,
-            type: 'dialog',
-            dialogId: 1,
-            coords: {
-                x: 2,
-                y: 1
-            },
-            sprite: '',
-            spritePosition: [0, 0],
-            walkIndex: 0,
-            prevDirection: 'S',
-            currentDirection: 'S'
-        }
-    ],
+    gameMode: GAME_MODES.EXPLORING,
+    // сущности приходят из данных уровня (LEVELS[n].gameObjects) при LOAD_LEVEL
+    gameObjects: [],
 };
 
 const gameReducer = (state = initialState, action) => {
@@ -73,7 +19,7 @@ const gameReducer = (state = initialState, action) => {
             return {
                 ...state,
                 level: action.level.level,
-                dialogs: action.dialogs
+                gameObjects: action.level.gameObjects,
             };
         case SET_GAME_OBJECTS:
             return {
@@ -83,14 +29,11 @@ const gameReducer = (state = initialState, action) => {
         case SET_GAME_OBJECT_PARAMETER:
             return {
                 ...state,
-                gameObjects: state.gameObjects.map(obj => {
-                    if (obj['id'] === action.objectId && action.parameter in obj) {
-                        obj[`${action.parameter}`] = action.value;
-                        return obj;
-                    } else {
-                        return obj;
-                    }
-                }),
+                gameObjects: state.gameObjects.map(obj =>
+                    obj.id === action.objectId && action.parameter in obj
+                        ? {...obj, [action.parameter]: action.value}
+                        : obj
+                ),
             };
         case SET_GAME_MODE:
             return {
@@ -99,8 +42,6 @@ const gameReducer = (state = initialState, action) => {
             };
         default:
             return state;
-
-
     }
 };
 

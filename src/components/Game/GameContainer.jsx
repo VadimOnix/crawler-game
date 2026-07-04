@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Game from './Game';
 import { loadLevel, setGameMode, setGameObjects } from '../../redux/gameReducer';
 import { checkOnGameEvent, getUpdatedGameObjects } from '../../gameCore/controller';
-import CONSTANTS from '../../gameCore/constants';
+import CONSTANTS, { GAME_MODES, KEY_TO_DIRECTION, OBJECT_TYPES } from '../../gameCore/constants';
 import LEVELS from '../../gameCore/levels/LEVELS';
 import { loadDialogs, setCurrentDialog } from '../../redux/dialogsReducer';
 
@@ -24,15 +24,13 @@ class GameContainer extends Component {
     constructor(props) {
         super(props);
         this.handleKeydown = this.handleKeydown.bind(this);
-        this.reservedKeys = [37, 38, 39, 40];
         this.idleAnimate = false;
     }
 
     componentDidMount() {
-
-        // load firs level
-        this.props.loadLevel(LEVELS[1]);
-        this.props.loadDialogs(LEVELS[1].dialogs);
+        const level = LEVELS[this.props.level];
+        this.props.loadLevel(level);
+        this.props.loadDialogs(level.dialogs);
         // bad solution for architecture
         window.addEventListener('keydown', this.handleKeydown);
     }
@@ -57,45 +55,34 @@ class GameContainer extends Component {
      * @param {string} direction (W,N,E,S)
      * */
     move(direction) {
-            // обновить данные по всем игровым объектам на уровне
-            let updatedGameObjects = getUpdatedGameObjects(
-                this.props.gameObjects,
-                {type: 'move', direction},
-                this.props.level
-            );
+        // обновить данные по всем игровым объектам на уровне
+        let updatedGameObjects = getUpdatedGameObjects(
+            this.props.gameObjects,
+            {type: 'move', direction},
+            LEVELS[this.props.level]
+        );
 
-            let event = checkOnGameEvent(updatedGameObjects.newGameObjects);
-            if (event.isGameEvent) {
-                if (event.eventObject.type === 'dialog' &&
-                    !this.props.alreadyReadIndexes.includes(event.eventObject.dialogId)) {
-                    this.props.setGameMode('speaking');
-                    this.props.setCurrentDialog(event.eventObject.dialogId);
-                }
-            }
-            this.props.setGameObjects(updatedGameObjects.newGameObjects);
+        let event = checkOnGameEvent(updatedGameObjects.newGameObjects);
+        if (event.isGameEvent &&
+            event.eventObject.type === OBJECT_TYPES.DIALOG &&
+            !this.props.alreadyReadIndexes.includes(event.eventObject.dialogId)) {
+            this.props.setGameMode(GAME_MODES.SPEAKING);
+            this.props.setCurrentDialog(event.eventObject.dialogId);
+        }
+        this.props.setGameObjects(updatedGameObjects.newGameObjects);
     }
 
 
     handleKeydown(e) {
-        if (this.reservedKeys.includes(e.keyCode) && !this.idleAnimate && this.props.gameMode === 'exploring') {
+        const direction = KEY_TO_DIRECTION[e.key];
+        if (direction && !this.idleAnimate && this.props.gameMode === GAME_MODES.EXPLORING) {
             this.idleAnimate = true;
             e.preventDefault();
             this.waitGameAnimate(CONSTANTS.GAME_ANIMATE_SPEED)
                 .then(() => {
                     this.idleAnimate = false;
                 });
-            switch (e.keyCode) {
-                case 37:
-                    return this.move('W');
-                case 38:
-                    return this.move('N');
-                case 39:
-                    return this.move('E');
-                case 40:
-                    return this.move('S');
-                default:
-                    return console.log(e.keyCode);
-            }
+            this.move(direction);
         }
     }
 }

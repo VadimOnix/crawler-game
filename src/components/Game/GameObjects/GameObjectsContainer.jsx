@@ -1,72 +1,43 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import GameObject from './GameObject';
-import CONSTANTS from '../../../gameCore/constants';
-import { setGameObjectParameter } from '../../../redux/gameReducer';
-import heroSprite from '../../../assets/img/character/Female_Character.png';
+import CONSTANTS, { DIRECTIONS } from '../../../gameCore/constants';
 
-// Контейнер, который пробрасывает ...........
-
-let mapStateToProps = (state) => {
-    return {
-        gameObjects: state.game.gameObjects
-    };
+// Ряд спрайт-листа персонажа для каждого направления взгляда
+const DIRECTION_TO_SHEET_ROW = {
+    [DIRECTIONS.SOUTH]: 0,
+    [DIRECTIONS.WEST]: 1,
+    [DIRECTIONS.NORTH]: 2,
+    [DIRECTIONS.EAST]: 3,
 };
 
-let mapDispatchToProps = {
-    setGameObjectParameter
+const getSpritePosition = (gameObject, spriteSize) => {
+    const sheetRow = DIRECTION_TO_SHEET_ROW[gameObject.currentDirection] ?? 0;
+    return [spriteSize * gameObject.walkIndex, spriteSize * sheetRow];
 };
 
-class GameObjectsContainer extends Component {
-    componentDidMount() {
-        this.props.setGameObjectParameter(1, 'sprite', heroSprite);
-    }
+const getScreenPosition = (gameObject, spriteSize) => {
+    return [gameObject.coords.x * spriteSize, gameObject.coords.y * spriteSize];
+};
 
-    render() {
-        let gameObjects = this.props.gameObjects.map(obj => {
-            let posArray = this.calculatePosition(obj, CONSTANTS.SPRITE_SIZE);
-            let spritePos = this.getSpritePosition(obj, CONSTANTS.SPRITE_SIZE);
+const GameObjectsContainer = () => {
+    const gameObjects = useSelector(state => state.game.gameObjects);
 
-            return (
+    // объекты без спрайта (триггеры диалогов, заглушки) не рендерим
+    return (
+        <>
+            {gameObjects.filter(obj => obj.sprite).map(obj => (
                 <GameObject
-                    position = {posArray}
+                    position = {getScreenPosition(obj, CONSTANTS.SPRITE_SIZE)}
                     width = {CONSTANTS.SPRITE_SIZE}
                     height = {CONSTANTS.SPRITE_SIZE}
                     key = {obj.id}
                     sprite = {obj.sprite}
-                    spritePosition = {spritePos}
+                    spritePosition = {getSpritePosition(obj, CONSTANTS.SPRITE_SIZE)}
                 />
-            );
-        });
+            ))}
+        </>
+    );
+};
 
-        return (
-            <>
-                {gameObjects}
-            </>
-        );
-    }
-
-
-    getSpritePosition(gameObject, spriteSize) {
-        switch (gameObject.currentDirection) {
-            case 'S':
-                return [spriteSize * gameObject.walkIndex, 0];
-            case'W':
-                return [spriteSize * gameObject.walkIndex, spriteSize];
-            case 'N':
-                return [spriteSize * gameObject.walkIndex, spriteSize * 2];
-            case 'E':
-                return [spriteSize * gameObject.walkIndex, spriteSize * 3];
-            default:
-                return [spriteSize * gameObject.walkIndex, 0];
-        }
-    }
-
-    calculatePosition(gameObject, spriteSize) {
-        let x = gameObject.coords.x;
-        let y = gameObject.coords.y;
-        return [x * spriteSize, y * spriteSize];
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameObjectsContainer);
+export default GameObjectsContainer;

@@ -3,8 +3,9 @@ import buildings_sheet from '../../assets/img/map/colony-buildings-ready.png';
 
 import hero_avatar from '../../assets/img/hero_avatar_small.png';
 import enemy_avatar from '../../assets/img/enemy_avatar_small.png';
+import hero_sprite_sheet from '../../assets/img/character/Female_Character.png';
 
-import CONSTANTS from '../constants';
+import CONSTANTS, { DIRECTIONS, OBJECT_TYPES, SPEAKER_ROLES } from '../constants';
 
 export const LEVELS = {
     1: {
@@ -56,18 +57,60 @@ export const LEVELS = {
                 sizeY: CONSTANTS.SPRITE_SIZE,
             }
         },
+        gameObjects: [
+            {
+                id: 1,
+                type: OBJECT_TYPES.HERO,
+                coords: {x: 0, y: 0},
+                sprite: hero_sprite_sheet,
+                walkIndex: 0,
+                prevDirection: DIRECTIONS.SOUTH,
+                currentDirection: DIRECTIONS.SOUTH
+            },
+            {
+                id: 2,
+                type: OBJECT_TYPES.TREASURE_CHEST,
+                coords: {x: 5, y: 5},
+                sprite: '',
+                walkIndex: 0,
+                prevDirection: DIRECTIONS.SOUTH,
+                currentDirection: DIRECTIONS.SOUTH
+            },
+            {
+                id: 3,
+                type: OBJECT_TYPES.MONSTER,
+                coords: {x: 10, y: 10},
+                sprite: '',
+                walkIndex: 0,
+                prevDirection: DIRECTIONS.SOUTH,
+                currentDirection: DIRECTIONS.SOUTH
+            },
+            {
+                id: 4,
+                type: OBJECT_TYPES.DIALOG,
+                dialogId: 1,
+                coords: {x: 2, y: 1},
+                sprite: '',
+                walkIndex: 0,
+                prevDirection: DIRECTIONS.SOUTH,
+                currentDirection: DIRECTIONS.SOUTH
+            }
+        ],
         dialogs: {
             speakersData: [
                 {
                     name: 'Leia',
+                    role: SPEAKER_ROLES.HERO,
                     sprite: hero_avatar
                 },
                 {
                     name: 'Grimm',
+                    role: SPEAKER_ROLES.ENEMY,
                     sprite: enemy_avatar
                 },
                 {
                     name: 'Незнакомец',
+                    role: SPEAKER_ROLES.ENEMY,
                     sprite: enemy_avatar
                 }
             ],
