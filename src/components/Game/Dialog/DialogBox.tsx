@@ -14,13 +14,20 @@ interface DialogBoxProps {
 const DialogBox = (props: DialogBoxProps) => {
     const typing = useDialogsStore((state) => state.typing);
 
+    // мгновенно допечатать фразу; вызывается и по Enter, и по тапу
+    const skipTyping = useCallback(() => {
+        if (typing) {
+            useDialogsStore.getState().setTyping(false);
+        }
+    }, [typing]);
+
     const handleEnterKeydown = useCallback(
         (e: KeyboardEvent) => {
-            if (e.key === 'Enter' && typing) {
-                useDialogsStore.getState().setTyping(false);
+            if (e.key === 'Enter') {
+                skipTyping();
             }
         },
-        [typing],
+        [skipTyping],
     );
 
     useEffect(() => {
@@ -56,7 +63,7 @@ const DialogBox = (props: DialogBoxProps) => {
     });
 
     return (
-        <div className={[classes.dialogBox, props.boxRole].join(' ')}>
+        <div className={[classes.dialogBox, props.boxRole].join(' ')} onClick={skipTyping}>
             <img className={classes.avatar} src={props.spriteSrc} alt="" />
             <h3 className={classes.title}>{props.speaker}</h3>
             {getTypingContent}
@@ -64,7 +71,7 @@ const DialogBox = (props: DialogBoxProps) => {
                 style={{ position: 'absolute', ...nextPopupStyle }}
                 className={classes.nextPopup}
             >
-                <span>пропустить (Enter) </span>
+                <span>пропустить (Enter / тап) </span>
             </animated.div>
         </div>
     );

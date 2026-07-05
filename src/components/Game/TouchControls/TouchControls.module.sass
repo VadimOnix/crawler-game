@@ -1,0 +1,48 @@
+.dpad
+  display: none
+  position: fixed
+  right: max(16px, env(safe-area-inset-right))
+  bottom: max(16px, env(safe-area-inset-bottom))
+  z-index: 900
+  grid-template-areas: '. up .' 'left . right' '. down .'
+  grid-template-columns: repeat(3, 54px)
+  grid-template-rows: repeat(3, 54px)
+  gap: 6px
+
+  // показываем только на устройствах с «грубым» указателем (тач)
+  @media (pointer: coarse)
+    display: grid
+
+.dpadButton
+  display: flex
+  align-items: center
+  justify-content: center
+  padding: 0
+  font-size: 1.1rem
+  color: #7df9ff
+  background: rgba(5, 10, 25, .6)
+  border: 1px solid rgba(0, 240, 255, .5)
+  border-radius: 10px
+  box-shadow: 0 0 12px rgba(0, 240, 255, .15)
+  backdrop-filter: blur(4px)
+  touch-action: none
+  user-select: none
+  -webkit-tap-highlight-color: transparent
+
+  &:active
+    color: #ffffff
+    border-color: var(--cyber-magenta)
+    box-shadow: 0 0 16px rgba(255, 45, 149, .35)
+    transform: scale(.94)
+
+.up
+  grid-area: up
+
+.left
+  grid-area: left
+
+.right
+  grid-area: right
+
+.down
+  grid-area: down

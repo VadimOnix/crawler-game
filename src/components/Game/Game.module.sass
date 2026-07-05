@@ -1,3 +1,15 @@
+// обёртка-«камера»: на десктопе поле помещается целиком и обёртка
+// прозрачна; на маленьких экранах превращается в скроллящийся вьюпорт,
+// который программно следует за героем (см. GameContainer)
+.viewport
+  @media (max-width: 900px), (max-height: 900px)
+    width: 100vw
+    height: 100vh
+    height: 100dvh
+    overflow: hidden
+    // жесты внутри поля обрабатывает игра (свайпы), а не браузер
+    touch-action: none
+
 .gameContainer
   height: 800px
   width: 800px
