@@ -38,7 +38,9 @@ a {
 
 .App {
     position: relative;
+    /* svh: высота видимой области с учётом панелей мобильного браузера */
     height: 100vh;
+    height: 100svh;
     width: 100vw;
     background: no-repeat center;
     background-size: cover;
