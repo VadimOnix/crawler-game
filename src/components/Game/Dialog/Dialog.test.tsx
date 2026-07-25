@@ -50,6 +50,28 @@ describe('Dialog', () => {
         expect(screen.getByText('первая фраза')).toBeTruthy();
     });
 
+    it('объявляет себя диалогом и забирает фокус', () => {
+        render(<Dialog />);
+
+        const dialog = screen.getByRole('dialog');
+        expect(dialog.getAttribute('aria-modal')).toBe('true');
+        expect(dialog.getAttribute('aria-label')).toBe('Диалог');
+        expect(document.activeElement).toBe(dialog);
+    });
+
+    it('помечает область фразы как живую, чтобы скринридер её зачитал', () => {
+        const { container } = render(<Dialog />);
+
+        const live = container.querySelector('[aria-live="polite"]');
+        expect(live).toBeTruthy();
+        // пока идёт печать, зачитывать нечего
+        expect(live?.getAttribute('aria-busy')).toBe('true');
+
+        pressEnter();
+
+        expect(live?.getAttribute('aria-busy')).toBe('false');
+    });
+
     it('Enter допечатывает фразу, не листая её', () => {
         render(<Dialog />);
 

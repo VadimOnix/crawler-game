@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import useReducedMotion from '../../../utils/useReducedMotion';
 
 interface TypingTextProps {
     /** текст для печати */
@@ -15,6 +16,8 @@ interface TypingTextProps {
 
 /**
  * Печатает текст посимвольно (замена заброшенной react-typing-animation).
+ * При prefers-reduced-motion печать пропускается: здесь анимация — это сам
+ * контент, поэтому стилями её не погасить.
  */
 const TypingText = ({
     text,
@@ -24,13 +27,17 @@ const TypingText = ({
     className,
     cursorClassName,
 }: TypingTextProps) => {
+    const reducedMotion = useReducedMotion();
     const [visibleCount, setVisibleCount] = useState(0);
-    const isFinished = visibleCount >= text.length;
+    const isFinished = reducedMotion || visibleCount >= text.length;
 
     const onFinishedRef = useRef(onFinishedTyping);
     onFinishedRef.current = onFinishedTyping;
 
     useEffect(() => {
+        if (reducedMotion) {
+            return;
+        }
         setVisibleCount(0);
         let intervalId: ReturnType<typeof setInterval> | undefined;
         const timeoutId = setTimeout(() => {
@@ -49,7 +56,7 @@ const TypingText = ({
             clearTimeout(timeoutId);
             clearInterval(intervalId);
         };
-    }, [text, speed, startDelay]);
+    }, [reducedMotion, text, speed, startDelay]);
 
     useEffect(() => {
         if (isFinished) {
@@ -60,7 +67,7 @@ const TypingText = ({
     return (
         <div className={className}>
             <p>
-                {text.slice(0, visibleCount)}
+                {reducedMotion ? text : text.slice(0, visibleCount)}
                 {!isFinished && <span className={cursorClassName}>|</span>}
             </p>
         </div>

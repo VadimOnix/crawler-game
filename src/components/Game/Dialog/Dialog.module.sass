@@ -1,3 +1,5 @@
+@use '../../../styles/breakpoints' as bp
+
 .dialogBoxWrapper
   position: absolute
   z-index: 999
@@ -6,7 +8,7 @@
 
   // на маленьких экранах поле скроллится за героем, поэтому диалог
   // крепится к низу экрана, а не к координатам поля
-  @media (max-width: 900px), (max-height: 900px)
+  @media (max-width: bp.$camera), (max-height: bp.$camera)
     position: fixed
     left: 50%
     bottom: max(10px, env(safe-area-inset-bottom))
@@ -41,7 +43,7 @@
     height: 2px
     background: linear-gradient(90deg, transparent, var(--accent), transparent)
 
-  @media (max-width: 900px), (max-height: 900px)
+  @media (max-width: bp.$camera), (max-height: bp.$camera)
     width: 100%
     min-height: 150px
     grid-column-gap: 12px
@@ -55,7 +57,7 @@
   grid-template-areas: 'a h' 'a t'
   grid-template-columns: 118px 1fr
 
-  @media (max-width: 900px), (max-height: 900px)
+  @media (max-width: bp.$camera), (max-height: bp.$camera)
     grid-template-columns: 84px 1fr
 
 .enemy
@@ -65,7 +67,7 @@
   grid-template-areas: 'h a' 't a'
   grid-template-columns: 1fr 118px
 
-  @media (max-width: 900px), (max-height: 900px)
+  @media (max-width: bp.$camera), (max-height: bp.$camera)
     grid-template-columns: 1fr 84px
 
 .avatar
@@ -78,7 +80,7 @@
   box-shadow: 0 0 14px var(--glow)
   align-self: center
 
-  @media (max-width: 900px), (max-height: 900px)
+  @media (max-width: bp.$camera), (max-height: bp.$camera)
     width: 84px
     height: 84px
     align-self: start
@@ -93,7 +95,7 @@
   word-wrap: break-word
   justify-self: start
 
-  @media (max-width: 900px), (max-height: 900px)
+  @media (max-width: bp.$camera), (max-height: bp.$camera)
     font-size: .85rem
     line-height: 1.4
 

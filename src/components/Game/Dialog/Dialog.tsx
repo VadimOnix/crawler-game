@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useEffect, useState } from 'react';
+import { useMemo, useCallback, useEffect, useRef, useState } from 'react';
 import classes from './Dialog.module.sass';
 
 import { animated, useTransition } from '@react-spring/web';
@@ -14,6 +14,12 @@ const Dialog = () => {
     const typing = useDialogsStore((state) => state.typing);
 
     const [index, setIndex] = useState(0);
+    const wrapperRef = useRef<HTMLDivElement>(null);
+
+    // переносим фокус в диалог, чтобы скринридер объявил его появление
+    useEffect(() => {
+        wrapperRef.current?.focus();
+    }, []);
 
     // фразы вместе с оформлением говорящего: роль задаёт вид рамки,
     // спрайт — аватар в боксе
@@ -70,7 +76,19 @@ const Dialog = () => {
     });
 
     return (
-        <div className={classes.dialogBoxWrapper} onClick={advanceDialog}>
+        // Enter слушается на window, а не на этом узле: в игре нажатие должно
+        // работать независимо от того, где сейчас фокус. Поэтому внутри нет
+        // вложенных интерактивных элементов — иначе Enter сработал бы дважды
+        // (keydown плюс синтетический click по кнопке в фокусе)
+        <div
+            className={classes.dialogBoxWrapper}
+            ref={wrapperRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Диалог"
+            onClick={advanceDialog}
+        >
             {transitions((style, item) => {
                 const phrase = phrases[item];
                 if (!phrase) {
