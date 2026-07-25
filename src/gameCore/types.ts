@@ -1,4 +1,4 @@
-import type { Direction, GameObjectType, SpeakerRole } from './constants';
+import type { Direction, GameObjectType, SpeakerRole, TileType } from './constants';
 
 export interface Coords {
     x: number;
@@ -19,7 +19,7 @@ export interface GameObject {
 }
 
 export interface TileAsset {
-    type: string;
+    type: TileType;
     walkable: boolean;
     bgUrl: string;
     top: number;

@@ -1,10 +1,8 @@
-import { Component } from 'react';
 import PlayerInfo from './PlayerInfo';
 
-class PlayerInfoContainer extends Component {
-    render() {
-        return <PlayerInfo />;
-    }
-}
+// экран персонажа — заготовка: рендерится по /character, но пока пустой
+const PlayerInfoContainer = () => {
+    return <PlayerInfo />;
+};
 
 export default PlayerInfoContainer;

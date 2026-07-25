@@ -2,13 +2,20 @@ const CONSTANTS = {
     SPRITE_SIZE: 50,
     MAP_COLUMNS: 16,
     MAP_ROWS: 16,
-    MAP_WIDTH: 800,
-    MAP_HEIGHT: 800,
-    FIX_TOP: 0,
-    FIX_LEFT: 0,
     GAME_ANIMATE_SPEED: 300, // in milliseconds
     PHASE_COUNT_ANIMATION: 2, // start from 0 phase
 } as const;
+
+/** Размер игрового поля в пикселях — производная от сетки и размера спрайта. */
+export const BOARD_WIDTH = CONSTANTS.MAP_COLUMNS * CONSTANTS.SPRITE_SIZE;
+export const BOARD_HEIGHT = CONSTANTS.MAP_ROWS * CONSTANTS.SPRITE_SIZE;
+
+export const TILE_TYPES = Object.freeze({
+    GROUND: 'ground',
+    BUILDING: 'building',
+} as const);
+
+export type TileType = (typeof TILE_TYPES)[keyof typeof TILE_TYPES];
 
 export const GAME_MODES = Object.freeze({
     EXPLORING: 'exploring',

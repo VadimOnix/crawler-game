@@ -3,7 +3,7 @@ import WorldMapContainer from './WorldMap/WorldMapContainer';
 import classes from './Game.module.sass';
 import Dialog from './Dialog/Dialog';
 import Battle from '../Battle/Battle';
-import { GAME_MODES } from '../../gameCore/constants';
+import { BOARD_HEIGHT, BOARD_WIDTH, GAME_MODES } from '../../gameCore/constants';
 import type { GameMode } from '../../gameCore/constants';
 
 interface GameProps {
@@ -12,7 +12,7 @@ interface GameProps {
 
 const Game = (props: GameProps) => {
     return (
-        <div className={classes.gameContainer}>
+        <div className={classes.gameContainer} style={{ width: BOARD_WIDTH, height: BOARD_HEIGHT }}>
             <WorldMapContainer />
             <GameObjectsContainer />
             <div className={classes.hudFrame} />
