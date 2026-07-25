@@ -63,6 +63,5 @@ export type GameAction = {
 };
 
 export interface GameEventCheck {
-    isGameEvent: boolean;
     eventObject: GameObject | null;
 }

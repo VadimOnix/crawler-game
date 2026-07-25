@@ -80,6 +80,20 @@ describe('isWalkable', () => {
         expect(isWalkable({ x: 0, y: 0 }, level.levelMap, level.levelAssets)).toBe(true);
         expect(isWalkable({ x: 3, y: 2 }, level.levelMap, level.levelAssets)).toBe(false);
     });
+
+    it('считает непроходимой клетку вне карты', () => {
+        const level = makeLevel();
+        expect(isWalkable({ x: -1, y: 0 }, level.levelMap, level.levelAssets)).toBe(false);
+        expect(isWalkable({ x: 0, y: CONSTANTS.MAP_ROWS }, level.levelMap, level.levelAssets)).toBe(
+            false,
+        );
+    });
+
+    it('считает непроходимым тайл, которого нет в ассетах уровня', () => {
+        const level = makeLevel();
+        level.levelMap[0][0] = 42;
+        expect(isWalkable({ x: 0, y: 0 }, level.levelMap, level.levelAssets)).toBe(false);
+    });
 });
 
 describe('getUpdatedGameObjects', () => {
@@ -179,6 +193,16 @@ describe('getUpdatedGameObjects', () => {
             expect(newGameObjects[0].walkIndex).toBe(2);
         });
 
+        it('не продвигается, когда герой упёрся в стену', () => {
+            const hero = makeHero({ x: 5, y: 5 }, { walkIndex: 1, prevDirection: DIRECTIONS.EAST });
+            const { newGameObjects } = getUpdatedGameObjects(
+                [hero],
+                { type: 'move', direction: DIRECTIONS.EAST },
+                makeLevel([{ x: 6, y: 5 }]),
+            );
+            expect(newGameObjects[0].walkIndex).toBe(1);
+        });
+
         it('зацикливается после последней фазы', () => {
             const hero = makeHero(
                 { x: 5, y: 5 },
@@ -204,7 +228,6 @@ describe('checkOnGameEvent', () => {
 
         const result = checkOnGameEvent([hero, trigger]);
 
-        expect(result.isGameEvent).toBe(true);
         expect(result.eventObject).toBe(trigger);
     });
 
@@ -212,20 +235,17 @@ describe('checkOnGameEvent', () => {
         const hero = makeHero({ x: 0, y: 0 });
         const trigger = makeHero({ x: 2, y: 1 }, { id: 4, type: OBJECT_TYPES.DIALOG, sprite: '' });
 
-        expect(checkOnGameEvent([hero, trigger])).toEqual({
-            isGameEvent: false,
-            eventObject: null,
-        });
+        expect(checkOnGameEvent([hero, trigger])).toEqual({ eventObject: null });
     });
 
     it('игнорирует несобытийные объекты на клетке героя', () => {
         const hero = makeHero({ x: 3, y: 3 });
         const chest = makeHero({ x: 3, y: 3 }, { id: 2, type: OBJECT_TYPES.TREASURE_CHEST });
 
-        expect(checkOnGameEvent([hero, chest]).isGameEvent).toBe(false);
+        expect(checkOnGameEvent([hero, chest]).eventObject).toBeNull();
     });
 
     it('возвращает false, если героя нет среди объектов', () => {
-        expect(checkOnGameEvent([])).toEqual({ isGameEvent: false, eventObject: null });
+        expect(checkOnGameEvent([])).toEqual({ eventObject: null });
     });
 });

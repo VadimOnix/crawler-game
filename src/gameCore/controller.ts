@@ -48,6 +48,7 @@ const calculateWalkIndex = (gameObject: GameObject, direction: Direction): numbe
 export interface GameTickResult {
     newGameObjects: GameObject[];
     info: {
+        /** герой действительно перешёл на другую клетку (а не упёрся) */
         heroChangedPosition: boolean;
     };
 }
@@ -61,7 +62,7 @@ export const getUpdatedGameObjects = (
     action: GameAction,
     level: Level,
 ): GameTickResult => {
-    let heroChangedPosition = true;
+    let heroChangedPosition = false;
 
     const newGameObjects = gameObjects.map((obj) => {
         switch (action.type) {
@@ -76,15 +77,19 @@ export const getUpdatedGameObjects = (
                 const positionChanged =
                     canMove && (newCoords.x !== obj.coords.x || newCoords.y !== obj.coords.y);
 
-                if (!positionChanged) {
-                    heroChangedPosition = false;
+                if (positionChanged) {
+                    heroChangedPosition = true;
                 }
 
                 return {
                     ...obj,
                     currentDirection: action.direction,
                     prevDirection: action.direction,
-                    walkIndex: calculateWalkIndex(obj, action.direction),
+                    // фаза ходьбы продвигается только на реальном шаге: упёршись
+                    // в стену, герой поворачивается, а не топчется на месте
+                    walkIndex: positionChanged
+                        ? calculateWalkIndex(obj, action.direction)
+                        : obj.walkIndex,
                     coords: positionChanged ? newCoords : obj.coords,
                 };
             }
@@ -102,12 +107,13 @@ export const getUpdatedGameObjects = (
 };
 
 /**
- * Ищет событийный объект (диалог, битва) на клетке героя.
+ * Ищет событийный объект (диалог, битва) на клетке героя,
+ * либо null, если события нет.
  */
 export const checkOnGameEvent = (gameObjects: GameObject[]): GameEventCheck => {
     const hero = gameObjects.find((obj) => obj.type === OBJECT_TYPES.HERO);
     if (!hero) {
-        return { isGameEvent: false, eventObject: null };
+        return { eventObject: null };
     }
     const heroPos = hero.coords;
     const eventObject = gameObjects.find(
@@ -116,16 +122,22 @@ export const checkOnGameEvent = (gameObjects: GameObject[]): GameEventCheck => {
             obj.coords.x === heroPos.x &&
             obj.coords.y === heroPos.y,
     );
-    return {
-        isGameEvent: eventObject !== undefined,
-        eventObject: eventObject ?? null,
-    };
+    return { eventObject: eventObject ?? null };
 };
 
+/**
+ * Проходима ли клетка. Клетка вне карты и клетка со ссылкой на неизвестный
+ * тайл считаются непроходимыми: битые данные уровня должны упирать героя
+ * в стену, а не ронять игровой цикл.
+ */
 export const isWalkable = (
     coords: Coords,
     levelMap: number[][],
     levelAssets: Record<number, TileAsset>,
 ): boolean => {
-    return levelAssets[levelMap[coords.y][coords.x]].walkable;
+    const tileId = levelMap[coords.y]?.[coords.x];
+    if (tileId === undefined) {
+        return false;
+    }
+    return levelAssets[tileId]?.walkable === true;
 };

@@ -45,7 +45,8 @@ export const useDialogsStore = create<DialogsStore>()(
             addReadDialog: (dialogId) =>
                 set(
                     (state) => ({
-                        alreadyReadIndexes: state.dialogList[dialogId].isDisposable
+                        // ?. — закрытие диалога не должно падать на неизвестном id
+                        alreadyReadIndexes: state.dialogList[dialogId]?.isDisposable
                             ? [...state.alreadyReadIndexes, dialogId]
                             : state.alreadyReadIndexes,
                         currentDialogId: 0,

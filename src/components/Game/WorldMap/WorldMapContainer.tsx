@@ -7,9 +7,20 @@ import { useGameStore } from '../../../stores/gameStore';
 // единственный источник правды — LEVELS, стор хранит только номер уровня.
 const WorldMapContainer = () => {
     const level = useGameStore((state) => state.level);
-    const { levelMap, levelAssets } = LEVELS[level];
+    const levelData = LEVELS[level];
 
-    return <WorldMap mapLevel={levelMap} mapAssets={levelAssets} constants={CONSTANTS} />;
+    // уровня с таким номером нет: рисовать нечего, но и падать незачем
+    if (!levelData) {
+        return null;
+    }
+
+    return (
+        <WorldMap
+            mapLevel={levelData.levelMap}
+            mapAssets={levelData.levelAssets}
+            constants={CONSTANTS}
+        />
+    );
 };
 
 export default WorldMapContainer;
