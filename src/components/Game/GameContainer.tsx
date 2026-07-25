@@ -1,6 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Game from './Game';
 import TouchControls from './TouchControls/TouchControls';
+import ExitToMenu from './ExitToMenu/ExitToMenu';
 import classes from './Game.module.sass';
 import CONSTANTS, { DIRECTIONS, KEY_TO_DIRECTION, OBJECT_TYPES } from '../../gameCore/constants';
 import LEVELS from '../../gameCore/levels/LEVELS';
@@ -12,6 +14,7 @@ import { movePlayer } from './movePlayer';
 const SWIPE_MIN_DISTANCE = 24;
 
 const GameContainer = () => {
+    const navigate = useNavigate();
     const gameMode = useGameStore((state) => state.gameMode);
     const heroX = useGameStore(
         (state) => state.gameObjects.find((obj) => obj.type === OBJECT_TYPES.HERO)?.coords.x,
@@ -31,10 +34,19 @@ const GameContainer = () => {
         useDialogsStore.getState().loadDialogs(levelData.dialogs);
     }, []);
 
+    // выход в меню; состояние партии сбрасывается при следующем входе
+    // на игровой экран (loadLevel + loadDialogs)
+    const exitToMenu = useCallback(() => navigate('/'), [navigate]);
+
     // клавиатура: обработчик стабилен, актуальное состояние читается
     // из сторов императивно — без протухших замыканий и переподписок
     useEffect(() => {
         const handleKeydown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                exitToMenu();
+                return;
+            }
             const direction = KEY_TO_DIRECTION[e.key];
             if (!direction) {
                 return;
@@ -45,7 +57,7 @@ const GameContainer = () => {
 
         window.addEventListener('keydown', handleKeydown);
         return () => window.removeEventListener('keydown', handleKeydown);
-    }, []);
+    }, [exitToMenu]);
 
     // сенсорные экраны: свайп по полю двигает героя
     useEffect(() => {
@@ -106,6 +118,7 @@ const GameContainer = () => {
     return (
         <div className={classes.viewport} ref={viewportRef}>
             <Game gameMode={gameMode} />
+            <ExitToMenu onExit={exitToMenu} />
             <TouchControls />
         </div>
     );

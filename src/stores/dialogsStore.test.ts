@@ -25,6 +25,19 @@ describe('dialogsStore', () => {
         expect(state.dialogList).toEqual(DIALOGS.dialogList);
     });
 
+    it('loadDialogs сбрасывает прогресс прочтения предыдущей партии', () => {
+        useDialogsStore.getState().setCurrentDialog(1);
+        useDialogsStore.getState().addReadDialog(1);
+        useDialogsStore.getState().setTyping(false);
+
+        useDialogsStore.getState().loadDialogs(DIALOGS);
+
+        const state = useDialogsStore.getState();
+        expect(state.alreadyReadIndexes).toEqual([]);
+        expect(state.currentDialogId).toBe(0);
+        expect(state.typing).toBe(true);
+    });
+
     it('setCurrentDialog открывает диалог и включает печать текста', () => {
         useDialogsStore.getState().setTyping(false);
         useDialogsStore.getState().setCurrentDialog(1);

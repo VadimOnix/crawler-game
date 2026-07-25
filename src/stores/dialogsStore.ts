@@ -8,6 +8,7 @@ interface DialogsStore {
     typing: boolean;
     speakersData: Speaker[];
     dialogList: Record<number, Dialog>;
+    /** загружает диалоги уровня и сбрасывает прогресс их прочтения */
     loadDialogs: (dialogsData: LevelDialogs) => void;
     setCurrentDialog: (dialogId: number) => void;
     /** закрывает диалог; одноразовые диалоги помечаются прочитанными */
@@ -24,9 +25,18 @@ export const useDialogsStore = create<DialogsStore>()(
             speakersData: [],
             dialogList: {},
 
+            // прогресс прочтения привязан к id диалогов уровня, поэтому
+            // сбрасывается вместе с ними — иначе «New game» пропустила бы
+            // вступительный диалог, уже прочитанный в прошлой партии
             loadDialogs: (dialogsData) =>
                 set(
-                    { speakersData: dialogsData.speakersData, dialogList: dialogsData.dialogList },
+                    {
+                        speakersData: dialogsData.speakersData,
+                        dialogList: dialogsData.dialogList,
+                        alreadyReadIndexes: [],
+                        currentDialogId: 0,
+                        typing: true,
+                    },
                     false,
                     'loadDialogs',
                 ),
