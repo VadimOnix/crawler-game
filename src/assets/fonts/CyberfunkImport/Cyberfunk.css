@@ -1,11 +1,11 @@
+/* woff2 покрывает все браузеры, в которых проект вообще запускается
+   (сборка целится в ES2022), woff оставлен единственным фолбэком.
+   Форматы eot/ttf/svg были нужны для IE9 и iOS 4.1 и весили 64 КБ. */
 @font-face {
     font-family: 'Cyberfunk';
-    src: url('20a15dae14a6505716c6e41e71fb7d7e.eot'); /* IE9*/
     src:
-        url('20a15dae14a6505716c6e41e71fb7d7e.eot?#iefix') format('embedded-opentype'),
-        /* IE6-IE8 */ url('20a15dae14a6505716c6e41e71fb7d7e.woff2') format('woff2'),
-        /* chrome、firefox */ url('20a15dae14a6505716c6e41e71fb7d7e.woff') format('woff'),
-        /* chrome、firefox */ url('20a15dae14a6505716c6e41e71fb7d7e.ttf') format('truetype'),
-        /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-            url('20a15dae14a6505716c6e41e71fb7d7e.svg#Cyberfunk') format('svg'); /* iOS 4.1- */
+        url('20a15dae14a6505716c6e41e71fb7d7e.woff2') format('woff2'),
+        url('20a15dae14a6505716c6e41e71fb7d7e.woff') format('woff');
+    /* swap: заголовки видны сразу дефолтным шрифтом, а не «мигают» пустотой */
+    font-display: swap;
 }

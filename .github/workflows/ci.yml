@@ -40,8 +40,9 @@ jobs:
             - name: Typecheck
               run: npm run typecheck
 
+            # с покрытием: цифры видны в логе прогона, порогов пока нет
             - name: Test
-              run: npm test
+              run: npm run test:coverage
 
             - name: Build
               run: npx vite build
