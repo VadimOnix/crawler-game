@@ -8,6 +8,7 @@ interface GameStore {
     level: number;
     gameMode: GameMode;
     gameObjects: GameObject[];
+    /** загружает уровень с нуля: объекты из данных уровня, режим исследования */
     loadLevel: (level: Level) => void;
     setGameMode: (gameMode: GameMode) => void;
     setGameObjects: (gameObjects: GameObject[]) => void;
@@ -21,8 +22,18 @@ export const useGameStore = create<GameStore>()(
             // сущности приходят из данных уровня (LEVELS[n].gameObjects) при loadLevel
             gameObjects: [],
 
+            // gameMode сбрасывается вместе с объектами: иначе выход в меню
+            // посреди диалога вернул бы игрока в игру с открытым оверлеем
             loadLevel: (level) =>
-                set({ level: level.level, gameObjects: level.gameObjects }, false, 'loadLevel'),
+                set(
+                    {
+                        level: level.level,
+                        gameObjects: level.gameObjects,
+                        gameMode: GAME_MODES.EXPLORING,
+                    },
+                    false,
+                    'loadLevel',
+                ),
             setGameMode: (gameMode) => set({ gameMode }, false, 'setGameMode'),
             setGameObjects: (gameObjects) => set({ gameObjects }, false, 'setGameObjects'),
         }),
