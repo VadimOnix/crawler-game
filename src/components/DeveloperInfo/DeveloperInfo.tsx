@@ -1,5 +1,5 @@
 import classes from './DeveloperInfo.module.sass';
-import developerPhoto from '../../assets/img/Developer_Photo.jpg';
+import developerPhoto from '../../assets/img/Developer_Photo.webp';
 
 const DeveloperInfo = () => {
     return (

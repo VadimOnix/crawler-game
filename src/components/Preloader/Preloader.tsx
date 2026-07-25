@@ -10,7 +10,9 @@ const Preloader = () => {
     const imageStyle = useSpring({
         from: { opacity: 0 },
         to: { opacity: 1 },
-        delay: 1000,
+        // короткая задержка: прелоадер живёт ровно столько, сколько грузятся
+        // ассеты, поэтому логотип должен успеть проявиться
+        delay: 150,
     });
 
     return (
