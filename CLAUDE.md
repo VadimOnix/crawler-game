@@ -16,7 +16,7 @@ npm run build         # typecheck + production build to dist/
 npm run preview       # serve the production build locally
 ```
 
-Tests are Vitest, co-located with the code (`src/**/*.test.ts`) — pure gameCore logic and Zustand stores need no DOM, so there is no jsdom setup; reset stores in `beforeEach` via `useXxxStore.setState(initialState, true)`. CI (`.github/workflows/ci.yml`) runs lint + format check + typecheck + tests + build on every push to master and on pull requests.
+Tests are Vitest, co-located with the code (`src/**/*.test.ts(x)`); reset stores in `beforeEach` via `useXxxStore.setState(initialState, true)`. The default environment is `node` — pure gameCore logic and Zustand stores need no DOM. Component tests opt into jsdom with a `// @vitest-environment jsdom` docblock on the first line and render via `@testing-library/react`; `src/test/setup.ts` unmounts them between cases. Note that `@testing-library/jest-dom` is not installed, so assert on plain DOM (`element.textContent`) rather than matchers like `toHaveTextContent`. `movePlayer` throttles on `Date.now()`, which `vi.useFakeTimers()` also controls, so `vi.advanceTimersByTime` steps the game loop as well as timers. CI (`.github/workflows/ci.yml`) runs lint + format check + typecheck + tests + build on every push to master and on pull requests.
 
 Releases are tag-driven: pushing a `v*` tag (e.g. `npm version minor && git push --follow-tags`) triggers `.github/workflows/release.yml`, which re-runs checks, builds, and publishes a GitHub Release with auto-generated notes and a zipped `dist/`. Dependabot opens weekly PRs for npm (minor+patch grouped into one PR) and GitHub Actions updates.
 
