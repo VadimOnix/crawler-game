@@ -1,6 +1,5 @@
 import WorldMap from './WorldMap';
 import LEVELS from '../../../gameCore/levels/LEVELS';
-import CONSTANTS from '../../../gameCore/constants';
 import { useGameStore } from '../../../stores/gameStore';
 
 // Статичные данные уровня (карта, тайлы) не дублируются в сторе:
@@ -14,13 +13,7 @@ const WorldMapContainer = () => {
         return null;
     }
 
-    return (
-        <WorldMap
-            mapLevel={levelData.levelMap}
-            mapAssets={levelData.levelAssets}
-            constants={CONSTANTS}
-        />
-    );
+    return <WorldMap mapLevel={levelData.levelMap} mapAssets={levelData.levelAssets} />;
 };
 
 export default WorldMapContainer;

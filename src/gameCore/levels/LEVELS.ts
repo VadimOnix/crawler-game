@@ -5,7 +5,7 @@ import hero_avatar from '../../assets/img/hero_avatar_small.png';
 import enemy_avatar from '../../assets/img/enemy_avatar_small.png';
 import hero_sprite_sheet from '../../assets/img/character/Female_Character.png';
 
-import CONSTANTS, { DIRECTIONS, OBJECT_TYPES, SPEAKER_ROLES } from '../constants';
+import CONSTANTS, { DIRECTIONS, OBJECT_TYPES, SPEAKER_ROLES, TILE_TYPES } from '../constants';
 import type { Level } from '../types';
 
 export const LEVELS: Record<number, Level> = {
@@ -31,7 +31,7 @@ export const LEVELS: Record<number, Level> = {
         ],
         levelAssets: {
             0: {
-                type: 'ground',
+                type: TILE_TYPES.GROUND,
                 walkable: true,
                 bgUrl: ground_sheet,
                 top: 544,
@@ -40,7 +40,7 @@ export const LEVELS: Record<number, Level> = {
                 sizeY: CONSTANTS.SPRITE_SIZE,
             },
             1: {
-                type: 'ground',
+                type: TILE_TYPES.BUILDING,
                 walkable: false,
                 bgUrl: buildings_sheet,
                 top: 1575,
@@ -49,7 +49,7 @@ export const LEVELS: Record<number, Level> = {
                 sizeY: CONSTANTS.SPRITE_SIZE,
             },
             2: {
-                type: 'ground',
+                type: TILE_TYPES.GROUND,
                 walkable: true,
                 bgUrl: ground_sheet,
                 top: 654,

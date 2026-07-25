@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import CONSTANTS, { DIRECTIONS, OBJECT_TYPES } from './constants';
+import CONSTANTS, { DIRECTIONS, OBJECT_TYPES, TILE_TYPES } from './constants';
 import {
     calculateNewCoords,
     checkOnGameEvent,
@@ -9,7 +9,7 @@ import {
 import type { Coords, GameObject, Level, TileAsset } from './types';
 
 const FLOOR: TileAsset = {
-    type: 'floor',
+    type: TILE_TYPES.GROUND,
     walkable: true,
     bgUrl: '',
     top: 0,
@@ -18,7 +18,7 @@ const FLOOR: TileAsset = {
     sizeY: CONSTANTS.SPRITE_SIZE,
 };
 
-const WALL: TileAsset = { ...FLOOR, type: 'wall', walkable: false };
+const WALL: TileAsset = { ...FLOOR, type: TILE_TYPES.BUILDING, walkable: false };
 
 /** Пустая карта 16×16 из пола (тайл 0) со стенами (тайл 1) в указанных клетках */
 const makeLevel = (walls: Coords[] = [], gameObjects: GameObject[] = []): Level => {
