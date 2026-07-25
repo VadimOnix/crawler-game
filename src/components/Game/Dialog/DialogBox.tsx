@@ -27,20 +27,24 @@ const DialogBox = (props: DialogBoxProps) => {
         <div className={[classes.dialogBox, props.boxRole].join(' ')}>
             <img className={classes.avatar} src={props.spriteSrc} alt="" />
             <h3 className={classes.title}>{props.speaker}</h3>
-            {props.typing ? (
-                <TypingText
-                    className={classes.text}
-                    cursorClassName={classes.cursor}
-                    speed={3}
-                    startDelay={700}
-                    text={props.text}
-                    onFinishedTyping={props.onFinishedTyping}
-                />
-            ) : (
-                <div className={classes.text}>
-                    <p>{props.text}</p>
-                </div>
-            )}
+            {/* aria-live: скринридер зачитывает каждую новую фразу.
+                Печать посимвольно объявлять нельзя — отсюда aria-busy */}
+            <div aria-live="polite" aria-busy={props.typing}>
+                {props.typing ? (
+                    <TypingText
+                        className={classes.text}
+                        cursorClassName={classes.cursor}
+                        speed={3}
+                        startDelay={700}
+                        text={props.text}
+                        onFinishedTyping={props.onFinishedTyping}
+                    />
+                ) : (
+                    <div className={classes.text}>
+                        <p>{props.text}</p>
+                    </div>
+                )}
+            </div>
             <animated.div
                 style={{ position: 'absolute', ...nextPopupStyle }}
                 className={classes.nextPopup}

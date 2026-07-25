@@ -27,6 +27,20 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+/* Уважаем системную настройку «меньше движения»: гасим переходы и анимации,
+   включая инлайновые (отсюда !important). Посимвольная печать текста —
+   это контент, а не стиль, поэтому она отключается в TypingText. */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 ::selection {
     background: rgba(0, 240, 255, 0.35);
     color: #fff;

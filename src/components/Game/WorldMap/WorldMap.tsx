@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import classes from './WorldMap.module.sass';
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../../../gameCore/constants';
 import type { TileAsset } from '../../../gameCore/types';
@@ -32,8 +33,12 @@ interface WorldMapProps {
 /**
  * Тайлы позиционируются абсолютно собственным transform, поэтому строки
  * карты рендерятся плоским списком — обёртки-ряды на раскладку не влияли.
+ *
+ * memo: карта — это 256 узлов, которые зависят только от данных уровня.
+ * Без него она перерисовывалась целиком на каждый ререндер Game, то есть
+ * на каждое открытие и закрытие диалога.
  */
-const WorldMap = (props: WorldMapProps) => {
+const WorldMap = memo((props: WorldMapProps) => {
     return (
         <div className={classes.worldMap} style={{ width: BOARD_WIDTH, height: BOARD_HEIGHT }}>
             {props.mapLevel.map((row, rowIndex) =>
@@ -48,6 +53,8 @@ const WorldMap = (props: WorldMapProps) => {
             )}
         </div>
     );
-};
+});
+
+WorldMap.displayName = 'WorldMap';
 
 export default WorldMap;

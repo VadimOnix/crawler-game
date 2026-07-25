@@ -38,7 +38,7 @@ Formats the codebase with Prettier / verifies that everything is formatted. `.sa
 
 ### `npm test` / `npm run test:watch`
 
-Runs the Vitest suite once / in watch mode. Tests live next to the code (`src/**/*.test.ts`) and cover the pure game core and the Zustand stores.
+Runs the Vitest suite once / in watch mode. Tests live next to the code (`src/**/*.test.ts(x)`) and cover the pure game core, the Zustand stores, and the components. The default test environment is `node`; component tests opt into jsdom with a `// @vitest-environment jsdom` docblock and render through `@testing-library/react`.
 
 ### `npm run typecheck`
 

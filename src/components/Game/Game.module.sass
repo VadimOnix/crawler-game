@@ -1,8 +1,10 @@
+@use '../../styles/breakpoints' as bp
+
 // обёртка-«камера»: на десктопе поле помещается целиком и обёртка
 // прозрачна; на маленьких экранах превращается в скроллящийся вьюпорт,
 // который программно следует за героем (см. GameContainer)
 .viewport
-  @media (max-width: 900px), (max-height: 900px)
+  @media (max-width: bp.$camera), (max-height: bp.$camera)
     width: 100vw
     // svh: не прячем низ поля под панель мобильного браузера
     height: 100vh
