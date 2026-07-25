@@ -30,6 +30,9 @@ const GameContainer = () => {
     useEffect(() => {
         const { level, loadLevel } = useGameStore.getState();
         const levelData = LEVELS[level];
+        if (!levelData) {
+            return;
+        }
         loadLevel(levelData);
         useDialogsStore.getState().loadDialogs(levelData.dialogs);
     }, []);

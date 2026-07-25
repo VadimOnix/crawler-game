@@ -7,71 +7,61 @@ import { useGameStore } from '../../../stores/gameStore';
 import { useDialogsStore } from '../../../stores/dialogsStore';
 import DialogBox from './DialogBox';
 
-interface AnimatedBoxProps {
-    style: React.CSSProperties;
-}
-
 const Dialog = () => {
     const currentDialogId = useDialogsStore((state) => state.currentDialogId);
     const currDialogData = useDialogsStore((state) => state.dialogList[state.currentDialogId]);
     const speakersData = useDialogsStore((state) => state.speakersData);
     const typing = useDialogsStore((state) => state.typing);
 
-    const phrasesCount = currDialogData?.phrases.length ?? 0;
+    const [index, setIndex] = useState(0);
 
-    const getBoxes = useMemo(() => {
+    // фразы вместе с оформлением говорящего: роль задаёт вид рамки,
+    // спрайт — аватар в боксе
+    const phrases = useMemo(() => {
         if (!currDialogData) {
             return [];
         }
-        return currDialogData.phrases.map((p) => {
-            const speakerData = speakersData.find((char) => char.name === p.speaker);
-            const boxRole = speakerData?.role === SPEAKER_ROLES.HERO ? classes.hero : classes.enemy;
-            const spriteSrc = speakerData?.sprite ?? '';
-            return ({ style }: AnimatedBoxProps) => (
-                <animated.div style={{ ...style, position: 'absolute' }}>
-                    <DialogBox
-                        boxRole={boxRole}
-                        spriteSrc={spriteSrc}
-                        text={p.text}
-                        speaker={p.speaker}
-                    />
-                </animated.div>
-            );
+        return currDialogData.phrases.map((phrase) => {
+            const speakerData = speakersData.find((char) => char.name === phrase.speaker);
+            return {
+                speaker: phrase.speaker,
+                text: phrase.text,
+                boxRole: speakerData?.role === SPEAKER_ROLES.HERO ? classes.hero : classes.enemy,
+                spriteSrc: speakerData?.sprite ?? '',
+            };
         });
     }, [currDialogData, speakersData]);
 
-    const [index, setIndex] = useState(0);
+    const finishTyping = useCallback(() => useDialogsStore.getState().setTyping(false), []);
 
-    // следующая фраза или закрытие диалога; вызывается и по Enter, и по тапу
+    /**
+     * Единственный обработчик продвижения диалога — и для Enter, и для тапа.
+     * Пока фраза печатается, ввод её допечатывает; дальше листает фразы
+     * и закрывает диалог на последней.
+     */
     const advanceDialog = useCallback(() => {
         if (typing) {
+            finishTyping();
             return;
         }
-        if (index < phrasesCount - 1) {
+        if (index < phrases.length - 1) {
             useDialogsStore.getState().setTyping(true);
             setIndex(index + 1);
-        } else {
-            useGameStore.getState().setGameMode(GAME_MODES.EXPLORING);
-            useDialogsStore.getState().addReadDialog(currentDialogId);
+            return;
         }
-    }, [currentDialogId, typing, index, phrasesCount]);
+        useGameStore.getState().setGameMode(GAME_MODES.EXPLORING);
+        useDialogsStore.getState().addReadDialog(currentDialogId);
+    }, [currentDialogId, finishTyping, typing, index, phrases.length]);
 
-    const handleEnterKeydown = useCallback(
-        (e: KeyboardEvent) => {
+    useEffect(() => {
+        const handleKeydown = (e: KeyboardEvent) => {
             if (e.key === 'Enter') {
                 advanceDialog();
             }
-        },
-        [advanceDialog],
-    );
-
-    useEffect(() => {
-        window.addEventListener('keydown', handleEnterKeydown);
-
-        return () => {
-            window.removeEventListener('keydown', handleEnterKeydown);
         };
-    }, [handleEnterKeydown]);
+        window.addEventListener('keydown', handleKeydown);
+        return () => window.removeEventListener('keydown', handleKeydown);
+    }, [advanceDialog]);
 
     const transitions = useTransition(index, {
         from: { opacity: 0, transform: 'translateY(100%)' },
@@ -82,8 +72,25 @@ const Dialog = () => {
     return (
         <div className={classes.dialogBoxWrapper} onClick={advanceDialog}>
             {transitions((style, item) => {
-                const D = getBoxes[item];
-                return D ? <D style={style as unknown as React.CSSProperties} /> : null;
+                const phrase = phrases[item];
+                if (!phrase) {
+                    return null;
+                }
+                return (
+                    <animated.div style={{ ...style, position: 'absolute' }}>
+                        <DialogBox
+                            boxRole={phrase.boxRole}
+                            spriteSrc={phrase.spriteSrc}
+                            text={phrase.text}
+                            speaker={phrase.speaker}
+                            // уходящая фраза остаётся статичным текстом: иначе
+                            // она обнулила бы напечатанное прямо во время
+                            // анимации ухода
+                            typing={item === index && typing}
+                            onFinishedTyping={finishTyping}
+                        />
+                    </animated.div>
+                );
             })}
         </div>
     );

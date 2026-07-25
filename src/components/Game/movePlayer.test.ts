@@ -43,6 +43,32 @@ describe('movePlayer', () => {
         expect(useDialogsStore.getState().currentDialogId).toBe(1);
     });
 
+    it('не троттлит следующий ход, если герой упёрся в стену', () => {
+        // (0,0) — левый верхний угол: ход на запад невозможен, значит
+        // не должен глушить следующее нажатие
+        movePlayer(DIRECTIONS.WEST);
+        movePlayer(DIRECTIONS.SOUTH);
+        expect(getHero()?.coords).toEqual({ x: 0, y: 1 });
+    });
+
+    it('не открывает диалог заново, пока герой стоит на триггере', () => {
+        for (const direction of [DIRECTIONS.SOUTH, DIRECTIONS.EAST, DIRECTIONS.EAST]) {
+            resetMoveThrottle();
+            movePlayer(direction);
+        }
+        // диалог прочитан и закрыт, герой остался на клетке триггера
+        useDialogsStore.getState().addReadDialog(1);
+        useGameStore.getState().setGameMode(GAME_MODES.EXPLORING);
+        useDialogsStore.setState({ alreadyReadIndexes: [] });
+
+        // ход в стену: позиция не меняется, значит и события быть не должно
+        resetMoveThrottle();
+        movePlayer(DIRECTIONS.NORTH);
+
+        expect(getHero()?.coords).toEqual({ x: 2, y: 1 });
+        expect(useGameStore.getState().gameMode).toBe(GAME_MODES.EXPLORING);
+    });
+
     it('не двигает героя вне режима исследования', () => {
         useGameStore.getState().setGameMode(GAME_MODES.SPEAKING);
         movePlayer(DIRECTIONS.SOUTH);
